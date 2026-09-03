@@ -1,0 +1,122 @@
+{
+  "production": {
+    "selected": {
+      "task": "production_forecast",
+      "model_name": "RandomForest",
+      "mae": 0.8437462149227917,
+      "rmse": 1.0818021508967515,
+      "r2": 0.9329003102493919,
+      "f1": null,
+      "roc_auc": null,
+      "samples": 108,
+      "validation_method": "chronological 80/20 split"
+    },
+    "comparison": [
+      {
+        "task": "production_forecast",
+        "model_name": "LinearRegression",
+        "mae": 0.8470353324587978,
+        "rmse": 1.0827863557686168,
+        "r2": 0.932778162438074,
+        "f1": null,
+        "roc_auc": null,
+        "samples": 108,
+        "validation_method": "chronological 80/20 split"
+      },
+      {
+        "task": "production_forecast",
+        "model_name": "RandomForest",
+        "mae": 0.8437462149227917,
+        "rmse": 1.0818021508967515,
+        "r2": 0.9329003102493919,
+        "f1": null,
+        "roc_auc": null,
+        "samples": 108,
+        "validation_method": "chronological 80/20 split"
+      },
+      {
+        "task": "production_forecast",
+        "model_name": "XGBoost",
+        "mae": 0.8808007650022155,
+        "rmse": 1.1416377522272159,
+        "r2": 0.9252723242660174,
+        "f1": null,
+        "roc_auc": null,
+        "samples": 108,
+        "validation_method": "chronological 80/20 split"
+      }
+    ]
+  },
+  "failure": {
+    "selected": {
+      "task": "failure_risk",
+      "model_name": "LogisticRegression",
+      "mae": null,
+      "rmse": null,
+      "r2": 0.9537037037037037,
+      "f1": 0.9700598802395209,
+      "roc_auc": 0.986987951807229,
+      "samples": 108,
+      "validation_method": "chronological 80/20 split"
+    },
+    "comparison": [
+      {
+        "task": "failure_risk",
+        "model_name": "LogisticRegression",
+        "mae": null,
+        "rmse": null,
+        "r2": 0.9537037037037037,
+        "f1": 0.9700598802395209,
+        "roc_auc": 0.986987951807229,
+        "samples": 108,
+        "validation_method": "chronological 80/20 split"
+      },
+      {
+        "task": "failure_risk",
+        "model_name": "RandomForest",
+        "mae": null,
+        "rmse": null,
+        "r2": 0.9351851851851852,
+        "f1": 0.9580838323353293,
+        "roc_auc": 0.9860240963855421,
+        "samples": 108,
+        "validation_method": "chronological 80/20 split"
+      },
+      {
+        "task": "failure_risk",
+        "model_name": "XGBoost",
+        "mae": null,
+        "rmse": null,
+        "r2": 0.9351851851851852,
+        "f1": 0.9590643274853801,
+        "roc_auc": 0.9840963855421686,
+        "samples": 108,
+        "validation_method": "chronological 80/20 split"
+      }
+    ]
+  },
+  "feature_columns": [
+    "reservoir_temperature",
+    "reservoir_pressure",
+    "oil_viscosity",
+    "oil_api",
+    "water_cut",
+    "steam_volume",
+    "injection_pressure",
+    "injection_duration",
+    "soak_time",
+    "stroke_length",
+    "spm",
+    "vfd_setting",
+    "pump_efficiency",
+    "rod_load",
+    "sor",
+    "energy_per_barrel",
+    "production_change",
+    "temperature_change",
+    "viscosity_change",
+    "rolling_production",
+    "rolling_sor"
+  ],
+  "disclaimer": "Models trained on synthetic demo data only."
+}
