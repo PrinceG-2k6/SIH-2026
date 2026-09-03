@@ -1,0 +1,174 @@
+ORIGIN — Model Helper
+SIH26120 · Oil India Limited · Team ORIGIN
+==========================================
+
+Disclaimer
+----------
+Models are trained on SYNTHETIC Baghewala demo data only.
+Predictions and recommendations are NOT calibrated OIL field outcomes
+and must not be presented as official operating guidance.
+
+
+1. Tech stack
+-------------
+Language:          Python
+Classical ML:      scikit-learn
+Gradient boosting: XGBoost
+Data handling:     pandas, numpy
+Model persistence: joblib  (files under /models)
+Explainability:    SHAP
+Serving:           FastAPI → backend/app/ml/predictor.py
+
+This is supervised classical ML (not deep learning / LLM).
+
+
+2. Code map
+-----------
+Training:     backend/app/ml/trainer.py
+Features:     backend/app/ml/features.py
+Inference:    backend/app/ml/predictor.py
+Explain:      backend/app/ml/explainability.py
+Constraints:  backend/app/config.py
+Artifacts:    models/production_model.joblib
+              models/failure_model.joblib
+              models/metrics.json
+
+
+3. Two ML tasks
+---------------
+
+A) Production forecast (REGRESSION)
+   Predicts: oil_rate_bopd
+   Candidates compared at train time:
+     - LinearRegression
+     - RandomForestRegressor  (n_estimators=100, max_depth=8, random_state=42)
+     - XGBRegressor           (n_estimators=120, max_depth=6, learning_rate=0.08,
+                               objective=reg:squarederror, random_state=42)
+   Selection rule: highest R² on chronological holdout
+   Typical selected (see models/metrics.json): RandomForest
+     MAE ≈ 0.84, RMSE ≈ 1.08, R² ≈ 0.93
+
+B) Failure risk (CLASSIFICATION)
+   Predicts: probability of a “failure-like” condition
+   Label = 1 if any of:
+     - failure_probability > 0.45
+     - rod_failure_event == 1
+     - pump_unsetting_event == 1
+   Candidates compared:
+     - LogisticRegression     (max_iter=500, random_state=42)
+     - RandomForestClassifier (n_estimators=100, max_depth=8, random_state=42)
+     - XGBClassifier          (n_estimators=120, max_depth=5, learning_rate=0.08,
+                               eval_metric=logloss, random_state=42)
+   Selection rule: highest F1 on chronological holdout
+   Typical selected (see models/metrics.json): LogisticRegression
+     F1 ≈ 0.97, ROC-AUC ≈ 0.99
+
+Validation method for both: chronological 80/20 split
+(time-ordered; not random shuffle — avoids future leakage).
+
+
+4. Operating parameters (CSS + SRP knobs)
+----------------------------------------
+These are the controllable inputs (OperatingParameters).
+Demo bounds live in backend/app/config.py — assumptions, not OIL limits.
+
+Parameter              Unit     Demo min   Demo max
+steam_volume           tons       200        800
+injection_pressure     bar          5         12
+injection_duration     hours       24        120
+soak_time              hours       24        120
+stroke_length          m          1.5        3.5
+spm                    1/min        3         10
+vfd_setting            %           40        100
+
+Also used as hard optimizer caps:
+  max_rod_load_kn = 95
+  max_failure_probability = 0.55
+
+
+5. Feature inputs (what the model sees)
+---------------------------------------
+Base features (FEATURE_COLUMNS):
+  reservoir_temperature
+  reservoir_pressure
+  oil_viscosity
+  oil_api
+  water_cut
+  steam_volume
+  injection_pressure
+  injection_duration
+  soak_time
+  stroke_length
+  spm
+  vfd_setting
+  pump_efficiency
+  rod_load
+  sor
+  energy_per_barrel
+
+Engineered features (per well, time-sorted):
+  production_change     — day-to-day oil rate delta
+  temperature_change    — day-to-day temp delta
+  viscosity_change      — day-to-day viscosity delta
+  rolling_production    — 7-day rolling mean oil rate
+  rolling_sor           — 7-day rolling mean SOR
+
+Preprocessing:
+  - sort by well_id, timestamp
+  - drop duplicate timestamps
+  - forward/back fill numeric gaps
+  - fill remaining NaN with 0 for the feature matrix
+
+
+6. How inference works
+----------------------
+1. Load latest well state from SQLite.
+2. Overlay proposed OperatingParameters (or keep current).
+3. preprocess() + build_feature_matrix().
+4. Production model → predicted_oil_rate_bopd.
+5. Failure model → predicted_failure_probability (predict_proba class 1).
+6. Secondary dashboard fields are DERIVED (physics-style formulas),
+   not from a second neural net:
+     predicted_reservoir_temperature
+     predicted_oil_viscosity
+     predicted_sor
+     predicted_energy_per_barrel
+     predicted_pump_efficiency
+     predicted_rod_load
+     predicted_rod_floating_probability
+
+Summary: ML for oil rate + failure risk; rules for the other metrics.
+
+
+7. Optimization (uses models, is not a model)
+---------------------------------------------
+backend/app/optimization/optimizer.py searches feasible CSS+SRP
+parameter combinations within demo constraints, scores them with
+prediction outputs, and returns a recommended + Pareto alternatives.
+
+Score weights (config.py):
+  weight_production      = 1.0
+  weight_sor_penalty     = 0.4
+  weight_energy_penalty  = 0.3
+  weight_failure_penalty = 0.5
+  weight_cost_penalty    = 0.2
+
+
+8. Retraining
+-------------
+Models train automatically on first API use if artifacts are missing.
+Force retrain: call train_models(force=True) or re-import CSV via Data page.
+Artifacts written to /models.
+
+
+9. Quick mental model for judges / reviewers
+--------------------------------------------
+Question answered by PRODUCTION model:
+  “If we run these CSS/SRP settings, what oil rate do we expect?”
+
+Question answered by FAILURE model:
+  “Under those settings, how likely is a failure-like condition?”
+
+Question answered by OPTIMIZER:
+  “Among feasible settings, which trade-off of production / SOR /
+   energy / risk / cost should we recommend?”
