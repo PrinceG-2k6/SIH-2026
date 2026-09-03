@@ -61,18 +61,11 @@ function ContribTable({
               <div className="relative h-1 bg-[rgba(232,226,214,0.06)]">
                 <div
                   className="absolute top-0 h-full"
-                  style={{
-                    width: `${pct}%`,
-                    left: pos ? "50%" : undefined,
-                    right: pos ? undefined : "50%",
-                    background: pos ? "var(--good)" : "var(--warn)",
-                    transform: pos ? undefined : "translateX(0)",
-                    marginLeft: pos ? 0 : undefined,
-                    marginRight: !pos ? 0 : undefined,
-                    ...(pos
-                      ? { left: "50%", width: `${pct / 2}%` }
-                      : { right: "50%", width: `${pct / 2}%`, left: "auto" }),
-                  }}
+                  style={
+                    pos
+                      ? { width: `${pct / 2}%`, left: "50%", background: "var(--good)" }
+                      : { width: `${pct / 2}%`, right: "50%", left: "auto", background: "var(--warn)" }
+                  }
                 />
                 <div className="absolute left-1/2 top-0 h-full w-px bg-[var(--line-strong)]" />
               </div>

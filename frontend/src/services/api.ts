@@ -79,6 +79,22 @@ export function getLiveTick(wellId: string, tick: number): Promise<LiveTick> {
   return fetchJson<LiveTick>(`/live/${wellId}?tick=${tick}`);
 }
 
+export function getFieldSnapshot(): Promise<Record<string, unknown>> {
+  return fetchJson("/twinlab/field");
+}
+
+export function getPhysicsTwin(wellId: string): Promise<Record<string, unknown>> {
+  return fetchJson(`/twinlab/state/${wellId}`);
+}
+
+export function postTwinlab(path: string, body: unknown = {}): Promise<Record<string, unknown>> {
+  return fetchJson(`/twinlab/${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
+
 export async function importCsv(file: File): Promise<{ imported_rows: number; filename: string }> {
   const form = new FormData();
   form.append("file", file);

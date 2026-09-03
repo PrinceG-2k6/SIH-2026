@@ -2,7 +2,7 @@ import { Suspense, useEffect, useState } from "react";
 import { Gauge } from "../components/Gauge";
 import { WellSchematic } from "../components/WellSchematic";
 import { DigitalTwinScene } from "../three/DigitalTwinScene";
-import { getTwinState } from "../services/api";
+import { getPhysicsTwin, getTwinState } from "../services/api";
 import type { DashboardData, TwinMode, TwinState } from "../types";
 
 const MODES: { id: TwinMode; label: string }[] = [
@@ -26,7 +26,18 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
     setLoading(true);
     setError(null);
     getTwinState(wellId, mode)
-      .then(setTwin)
+      .then(async (ml) => {
+        try {
+          const phys = await getPhysicsTwin(wellId);
+          setTwin({
+            ...ml,
+            heated_radius_m: Number(phys.heated_radius_m ?? ml.heated_radius_m),
+            reservoir_temperature: Number(phys.reservoir_temperature ?? ml.reservoir_temperature),
+          });
+        } catch {
+          setTwin(ml);
+        }
+      })
       .catch((e) => setError(e instanceof Error ? e.message : "Failed to load twin"))
       .finally(() => setLoading(false));
   }, [wellId, mode]);
@@ -139,6 +150,7 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <LinkChip label="Heated radius" value={`${(twin.heated_radius_m ?? 12).toFixed(1)} m`} />
             <LinkChip label="Steam mass" value={`${twin.steam_volume.toFixed(0)} t`} />
             <LinkChip label="Stroke length" value={`${twin.stroke_length.toFixed(2)} m`} />
             <LinkChip label="Pump η" value={`${(twin.pump_efficiency * 100).toFixed(0)}%`} />

@@ -10,11 +10,13 @@ import numpy as np
 import pandas as pd
 
 from app.config import settings
+from app.twin.catalog import DATASET_VERSION
+from app.twin.catalog import WELLS as CATALOG
+
 
 WELLS = [
-    {"well_id": "BGW-001", "name": "Baghewala Well 1", "base_temp": 47.5},
-    {"well_id": "BGW-002", "name": "Baghewala Well 2", "base_temp": 48.2},
-    {"well_id": "BGW-003", "name": "Baghewala Well 3", "base_temp": 46.8},
+    {"well_id": w.well_id, "name": w.name, "base_temp": w.fingerprint.base_temp_c}
+    for w in CATALOG
 ]
 
 
@@ -78,6 +80,8 @@ def generate_well_timeseries(well: dict, days: int = 180, seed: int = 42) -> pd.
     temp = well["base_temp"]
     css_cycle = 1
     cumulative_oil = 0.0
+    thermal_k = well.get("thermal", 1.0)
+    cool_k = well.get("cooling", 1.0)
 
     for day in range(days):
         ts = start + timedelta(days=day)
@@ -112,9 +116,9 @@ def generate_well_timeseries(well: dict, days: int = 180, seed: int = 42) -> pd.
         api = 18.0 + rng.normal(0, 0.3)
 
         if phase == "injection":
-            temp += steam_volume / 350.0 + rng.normal(0, 0.2)
+            temp += (steam_volume / 350.0) * thermal_k + rng.normal(0, 0.12)
         else:
-            temp -= 0.08 + rng.normal(0, 0.05)
+            temp -= (0.08 * cool_k) + rng.normal(0, 0.04)
 
         temp = float(np.clip(temp, 44.0, 72.0))
         viscosity = viscosity_from_temp(temp, api)
@@ -177,10 +181,21 @@ def generate_demo_dataset(output_dir: Path | None = None) -> pd.DataFrame:
     output_dir = output_dir or settings.demo_data_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    frames = [generate_well_timeseries(w, seed=100 + i) for i, w in enumerate(WELLS)]
+    frames = []
+    for i, meta in enumerate(CATALOG):
+        well = {
+            "well_id": meta.well_id,
+            "name": meta.name,
+            "base_temp": meta.fingerprint.base_temp_c,
+            "thermal": meta.fingerprint.thermal_responsiveness,
+            "cooling": meta.fingerprint.cooling_rate,
+        }
+        frames.append(generate_well_timeseries(well, seed=100 + i))
     df = pd.concat(frames, ignore_index=True)
     csv_path = output_dir / "baghewala_demo.csv"
     df.to_csv(csv_path, index=False)
+    marker = output_dir / "dataset_version.txt"
+    marker.write_text(DATASET_VERSION)
     return df
 
 

@@ -1,4 +1,4 @@
-export type PageId = "overview" | "whatif" | "twin" | "alerts" | "models" | "data";
+export type PageId = "overview" | "whatif" | "twin" | "lab" | "alerts" | "models" | "data";
 
 export interface WellSummary {
   well_id: string;
@@ -183,6 +183,10 @@ export interface TwinState {
   rod_floating_probability: number;
   failure_probability: number;
   parameters: OperatingParameters;
+  heated_radius_m?: number;
+  cycle_day?: number;
+  phase?: string;
+  depth_m?: number;
   demo_disclaimer: string;
 }
 

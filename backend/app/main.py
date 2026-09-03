@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
+from app.api.twinlab import router as twinlab_router
 from app.config import settings
 from app.data.loader import ensure_demo_data
 from app.ml.trainer import train_models
@@ -34,6 +35,7 @@ app.add_middleware(
 )
 
 app.include_router(router)
+app.include_router(twinlab_router)
 
 
 @app.get("/")

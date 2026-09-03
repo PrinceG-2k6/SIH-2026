@@ -2,6 +2,7 @@ import type { PageId } from "../types";
 
 const PAGES: { id: PageId; label: string }[] = [
   { id: "overview", label: "Overview" },
+  { id: "lab", label: "Field lab" },
   { id: "whatif", label: "What-if" },
   { id: "twin", label: "Twin" },
   { id: "alerts", label: "Alerts" },

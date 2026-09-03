@@ -19,6 +19,8 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from xgboost import XGBClassifier, XGBRegressor
 
 from app.config import settings
@@ -74,9 +76,16 @@ def train_models(force: bool = False) -> dict:
     fail_path = settings.model_dir / "failure_model.joblib"
     metrics_path = settings.model_dir / "metrics.json"
 
+    import sklearn
+
+    sk_ver = sklearn.__version__
     if prod_path.exists() and fail_path.exists() and metrics_path.exists() and not force:
         with open(metrics_path) as f:
-            return json.load(f)
+            cached = json.load(f)
+        # Retrain when sklearn major.minor changed — pickled estimators break across versions.
+        if cached.get("sklearn_version", "").rsplit(".", 1)[0] == sk_ver.rsplit(".", 1)[0]:
+            return cached
+        force = True
 
     df = get_training_dataframe()
     data = preprocess(df)
@@ -107,7 +116,10 @@ def train_models(force: bool = False) -> dict:
             best_reg_metrics = metrics
 
     clf_candidates = {
-        "LogisticRegression": LogisticRegression(max_iter=500, random_state=42),
+        "LogisticRegression": Pipeline([
+            ("scale", StandardScaler()),
+            ("clf", LogisticRegression(max_iter=1000, random_state=42)),
+        ]),
         "RandomForest": RandomForestClassifier(n_estimators=100, random_state=42, max_depth=8),
         "XGBoost": XGBClassifier(
             n_estimators=120, max_depth=5, learning_rate=0.08, random_state=42,
@@ -126,13 +138,14 @@ def train_models(force: bool = False) -> dict:
             best_clf = model
             best_clf_metrics = metrics
 
-    joblib.dump({"model": best_reg, "features": list(X.columns)}, prod_path)
-    joblib.dump({"model": best_clf, "features": list(X.columns)}, fail_path)
+    joblib.dump({"model": best_reg, "features": list(X.columns), "sklearn_version": sk_ver}, prod_path)
+    joblib.dump({"model": best_clf, "features": list(X.columns), "sklearn_version": sk_ver}, fail_path)
 
     result = {
         "production": {"selected": asdict(best_reg_metrics), "comparison": reg_comparison},
         "failure": {"selected": asdict(best_clf_metrics), "comparison": clf_comparison},
         "feature_columns": list(X.columns),
+        "sklearn_version": sk_ver,
         "disclaimer": "Models trained on synthetic demo data only.",
     }
     with open(metrics_path, "w") as f:
@@ -150,3 +163,11 @@ def load_failure_model():
     train_models()
     bundle = joblib.load(settings.model_dir / "failure_model.joblib")
     return bundle["model"], bundle["features"]
+
+
+def clear_model_cache_files() -> None:
+    """Force next train_models() call to rebuild pickles."""
+    for name in ("production_model.joblib", "failure_model.joblib", "metrics.json"):
+        path = settings.model_dir / name
+        if path.exists():
+            path.unlink()

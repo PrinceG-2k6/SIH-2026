@@ -2,47 +2,47 @@
   "production": {
     "selected": {
       "task": "production_forecast",
-      "model_name": "RandomForest",
-      "mae": 0.8437462149227917,
-      "rmse": 1.0818021508967515,
-      "r2": 0.9329003102493919,
+      "model_name": "XGBoost",
+      "mae": 0.8079777166578505,
+      "rmse": 1.0172332705072993,
+      "r2": 0.9676184985299048,
       "f1": null,
       "roc_auc": null,
-      "samples": 108,
+      "samples": 216,
       "validation_method": "chronological 80/20 split"
     },
     "comparison": [
       {
         "task": "production_forecast",
         "model_name": "LinearRegression",
-        "mae": 0.8470353324587978,
-        "rmse": 1.0827863557686168,
-        "r2": 0.932778162438074,
+        "mae": 1.3367326482202633,
+        "rmse": 1.6510599749847947,
+        "r2": 0.9146936090400709,
         "f1": null,
         "roc_auc": null,
-        "samples": 108,
+        "samples": 216,
         "validation_method": "chronological 80/20 split"
       },
       {
         "task": "production_forecast",
         "model_name": "RandomForest",
-        "mae": 0.8437462149227917,
-        "rmse": 1.0818021508967515,
-        "r2": 0.9329003102493919,
+        "mae": 0.8568710277348707,
+        "rmse": 1.0824912997800187,
+        "r2": 0.9633305244184757,
         "f1": null,
         "roc_auc": null,
-        "samples": 108,
+        "samples": 216,
         "validation_method": "chronological 80/20 split"
       },
       {
         "task": "production_forecast",
         "model_name": "XGBoost",
-        "mae": 0.8808007650022155,
-        "rmse": 1.1416377522272159,
-        "r2": 0.9252723242660174,
+        "mae": 0.8079777166578505,
+        "rmse": 1.0172332705072993,
+        "r2": 0.9676184985299048,
         "f1": null,
         "roc_auc": null,
-        "samples": 108,
+        "samples": 216,
         "validation_method": "chronological 80/20 split"
       }
     ]
@@ -50,13 +50,13 @@
   "failure": {
     "selected": {
       "task": "failure_risk",
-      "model_name": "LogisticRegression",
+      "model_name": "XGBoost",
       "mae": null,
       "rmse": null,
-      "r2": 0.9537037037037037,
-      "f1": 0.9700598802395209,
-      "roc_auc": 0.986987951807229,
-      "samples": 108,
+      "r2": 0.9120370370370371,
+      "f1": 0.9351535836177475,
+      "roc_auc": 0.9772026534616463,
+      "samples": 216,
       "validation_method": "chronological 80/20 split"
     },
     "comparison": [
@@ -65,10 +65,10 @@
         "model_name": "LogisticRegression",
         "mae": null,
         "rmse": null,
-        "r2": 0.9537037037037037,
-        "f1": 0.9700598802395209,
-        "roc_auc": 0.986987951807229,
-        "samples": 108,
+        "r2": 0.8796296296296297,
+        "f1": 0.9097222222222222,
+        "roc_auc": 0.974306269270298,
+        "samples": 216,
         "validation_method": "chronological 80/20 split"
       },
       {
@@ -76,10 +76,10 @@
         "model_name": "RandomForest",
         "mae": null,
         "rmse": null,
-        "r2": 0.9351851851851852,
-        "f1": 0.9580838323353293,
-        "roc_auc": 0.9860240963855421,
-        "samples": 108,
+        "r2": 0.9027777777777778,
+        "f1": 0.926829268292683,
+        "roc_auc": 0.9680463421470615,
+        "samples": 216,
         "validation_method": "chronological 80/20 split"
       },
       {
@@ -87,10 +87,10 @@
         "model_name": "XGBoost",
         "mae": null,
         "rmse": null,
-        "r2": 0.9351851851851852,
-        "f1": 0.9590643274853801,
-        "roc_auc": 0.9840963855421686,
-        "samples": 108,
+        "r2": 0.9120370370370371,
+        "f1": 0.9351535836177475,
+        "roc_auc": 0.9772026534616463,
+        "samples": 216,
         "validation_method": "chronological 80/20 split"
       }
     ]
@@ -118,5 +118,6 @@
     "rolling_production",
     "rolling_sor"
   ],
+  "sklearn_version": "1.5.2",
   "disclaimer": "Models trained on synthetic demo data only."
 }

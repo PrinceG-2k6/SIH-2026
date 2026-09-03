@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getPhysicsTwin } from "../services/api";
 import type { AlertsResponse } from "../types";
 
 const SEV = {
@@ -9,9 +11,22 @@ const SEV = {
 interface Props {
   alerts: AlertsResponse | null;
   loading: boolean;
+  wellId?: string;
 }
 
-export function AlertsPage({ alerts, loading }: Props) {
+export function AlertsPage({ alerts, loading, wellId }: Props) {
+  const [physics, setPhysics] = useState<{
+    severity: string; code: string; cause: string; evidence: string;
+    predicted_consequence: string; recommended_action: string;
+  }[]>([]);
+
+  useEffect(() => {
+    if (!wellId) return;
+    getPhysicsTwin(wellId)
+      .then((t) => setPhysics((t.alerts as typeof physics) ?? []))
+      .catch(() => setPhysics([]));
+  }, [wellId]);
+
   if (loading) return <p className="mono text-sm text-[var(--ink-faint)]">Loading alerts…</p>;
   if (!alerts) {
     return (
@@ -30,9 +45,23 @@ export function AlertsPage({ alerts, loading }: Props) {
         </div>
         <h2 className="serif mt-2 text-4xl font-semibold text-[var(--ink)]">Alerts</h2>
         <p className="mt-2 max-w-xl text-sm text-[var(--ink-muted)]">
-          Generated from prediction outputs and demo thresholds — not official OIL alarm limits.
+          ML risk board plus physics twin alerts (cause / evidence / consequence / action). Synthetic demo limits.
         </p>
       </div>
+
+      {physics.length > 0 && (
+        <section className="space-y-3">
+          <p className="eyebrow text-[var(--accent)]">Physics twin</p>
+          {physics.map((a) => (
+            <div key={a.code} className="plate px-5 py-4">
+              <p className="eyebrow">{a.severity} · {a.code}</p>
+              <p className="mt-2 text-sm text-[var(--ink)]">{a.recommended_action}</p>
+              <p className="mt-1 text-xs text-[var(--ink-muted)]">Cause: {a.cause}</p>
+              <p className="text-xs text-[var(--ink-faint)]">Evidence: {a.evidence} · {a.predicted_consequence}</p>
+            </div>
+          ))}
+        </section>
+      )}
 
       {alerts.alerts.length === 0 ? (
         <div className="plate border-[rgba(111,159,122,0.35)] px-6 py-16 text-center">

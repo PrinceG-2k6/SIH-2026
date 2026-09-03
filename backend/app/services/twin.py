@@ -48,6 +48,14 @@ def build_twin_state(
         )
         pred = predict(well_id)
 
+    physics = None
+    try:
+        from app.twin.compose import compose_twin
+
+        physics = compose_twin(well_id)
+    except Exception:
+        physics = None
+
     return TwinState(
         well_id=well_id,
         mode=mode,
@@ -64,4 +72,8 @@ def build_twin_state(
         rod_floating_probability=pred.predicted_rod_floating_probability,
         failure_probability=pred.predicted_failure_probability,
         parameters=params,
+        heated_radius_m=physics["heated_radius_m"] if physics else 12.0,
+        cycle_day=physics["cycle_day"] if physics else 18,
+        phase=physics["phase"] if physics else "production",
+        depth_m=physics["depth_m"] if physics else 1100.0,
     )

@@ -6,13 +6,14 @@ import { DataPage } from "./pages/DataPage";
 import { DigitalTwinPage } from "./pages/DigitalTwinPage";
 import { ModelsPage } from "./pages/ModelsPage";
 import { OverviewPage } from "./pages/OverviewPage";
+import { TwinLabPage } from "./pages/TwinLabPage";
 import { WhatIfPage } from "./pages/WhatIfPage";
 import type { DashboardData, PageId, WellSummary } from "./types";
 
 export default function App() {
   const [page, setPage] = useState<PageId>("overview");
   const [wells, setWells] = useState<WellSummary[]>([]);
-  const [selectedWell, setSelectedWell] = useState("BGW-001");
+  const [selectedWell, setSelectedWell] = useState("BGW-01");
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -67,9 +68,10 @@ export default function App() {
           </div>
         )}
         {data && page === "overview" && <OverviewPage data={data} wellId={selectedWell} />}
+        {page === "lab" && <TwinLabPage wellId={selectedWell} />}
         {data && page === "whatif" && <WhatIfPage wellId={selectedWell} dashboard={data} />}
         {page === "twin" && <DigitalTwinPage wellId={selectedWell} dashboard={data} />}
-        {data && page === "alerts" && <AlertsPage alerts={data.alerts} loading={false} />}
+        {data && page === "alerts" && <AlertsPage alerts={data.alerts} loading={false} wellId={selectedWell} />}
         {data && page === "models" && <ModelsPage metrics={data.model_metrics} />}
         {page === "data" && <DataPage />}
         {!loading && !data && !error && (

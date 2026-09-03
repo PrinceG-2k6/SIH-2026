@@ -24,4 +24,8 @@ class TwinState(BaseModel):
     rod_floating_probability: float
     failure_probability: float
     parameters: OperatingParameters
+    heated_radius_m: float = 12.0
+    cycle_day: int = 18
+    phase: str = "production"
+    depth_m: float = 1100.0
     demo_disclaimer: str = "3D state reflects backend simulation values."

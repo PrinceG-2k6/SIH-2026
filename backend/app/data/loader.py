@@ -11,29 +11,35 @@ from app.config import settings
 from app.data.database import SessionLocal, WellRecord, db_has_data, get_engine, load_csv_to_db
 from app.data.generator import WELLS, generate_demo_dataset
 from app.schemas.well import WellHistoryPoint, WellState, WellSummary
+from app.twin.catalog import DATASET_VERSION, get_well_meta, normalize_well_id
 
 
 def ensure_demo_data() -> None:
-    if db_has_data():
-        return
+    marker = settings.demo_data_dir / "dataset_version.txt"
     csv_path = settings.demo_data_dir / "baghewala_demo.csv"
-    if not csv_path.exists():
+    needs = True
+    if db_has_data() and marker.exists() and marker.read_text().strip() == DATASET_VERSION:
+        needs = False
+    if needs:
         generate_demo_dataset(settings.demo_data_dir)
-    load_csv_to_db(csv_path)
+        load_csv_to_db(csv_path)
 
 
 def get_all_wells() -> list[WellSummary]:
     ensure_demo_data()
-    return [
-        WellSummary(
-            well_id=w["well_id"],
-            name=w["name"],
-            field="Baghewala",
-            api_gravity=18.0,
-            status="active",
+    out = []
+    for w in WELLS:
+        meta = get_well_meta(w["well_id"])
+        out.append(
+            WellSummary(
+                well_id=w["well_id"],
+                name=w["name"],
+                field="Baghewala",
+                api_gravity=meta.fingerprint.api_gravity if meta else 18.0,
+                status="active",
+            )
         )
-        for w in WELLS
-    ]
+    return out
 
 
 def _record_to_state(record: WellRecord) -> WellState:
@@ -67,20 +73,24 @@ def _record_to_state(record: WellRecord) -> WellState:
 
 def get_latest_state(well_id: str) -> WellState | None:
     ensure_demo_data()
+    nid = normalize_well_id(well_id)
     with Session(get_engine()) as session:
         record = (
             session.query(WellRecord)
-            .filter(WellRecord.well_id == well_id)
+            .filter(WellRecord.well_id == nid)
             .order_by(WellRecord.timestamp.desc())
             .first()
         )
         if not record:
             return None
-        return _record_to_state(record)
+        state = _record_to_state(record)
+        state.well_id = well_id
+        return state
 
 
 def get_well_history(well_id: str, limit: int = 90) -> list[WellHistoryPoint]:
     ensure_demo_data()
+    well_id = normalize_well_id(well_id)
     with Session(get_engine()) as session:
         records = (
             session.query(WellRecord)

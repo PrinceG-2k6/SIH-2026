@@ -137,3 +137,32 @@ def test_benefit_summary(client):
     data = res.json()
     assert "production_improvement_pct" in data
     assert "summary" in data
+
+
+def test_twinlab_field_and_state(client):
+    field = client.get("/api/twinlab/field")
+    assert field.status_code == 200
+    body = field.json()
+    assert body["metrics"]["well_count"] >= 6
+    assert any(w["well_id"] == "BGW-01" for w in body["wells"])
+    st = client.get("/api/twinlab/state/BGW-01")
+    assert st.status_code == 200
+    twin = st.json()
+    assert "heated_radius_m" in twin
+    assert "wellbore" in twin
+    assert "srp" in twin
+    assert "governor" in twin
+    assert "uncertainty" in twin
+    assert "alerts" in twin
+    assert "confidence" in twin
+    assert "inferred" in twin
+    assert "probabilistic_diagnosis" in twin
+    assert "safety" in twin
+    assert "economic_options" in twin
+    assert twin["governor"].get("asymmetric") is not None
+    w = client.post("/api/twinlab/weights/BGW-01", json={"preset": "reliability"})
+    assert w.status_code == 200
+    sim = client.post("/api/twinlab/dispatch/BGW-01/simulate", json={"spm": 5.0})
+    assert sim.status_code == 200
+    assert "pending" in sim.json()
+    client.post("/api/twinlab/dispatch/BGW-01/reject")

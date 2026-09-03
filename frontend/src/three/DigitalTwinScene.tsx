@@ -289,12 +289,17 @@ function CasingString() {
   );
 }
 
-function Formation({ temp, steam }: { temp: number; steam: number }) {
+function Formation({ temp, steam, radius = 12 }: { temp: number; steam: number; radius?: number }) {
   const heat = useMemo(() => {
     const t = THREE.MathUtils.clamp((temp - 44) / 28, 0, 1);
     return new THREE.Color().setHSL(0.065 - t * 0.04, 0.7, 0.2 + t * 0.3);
   }, [temp]);
-  const s = 0.9 + (temp - 44) / 40 + steam / 1600;
+  const s = 0.55 + Math.min(2.2, radius / 14) + (temp - 44) / 80 + steam / 2400;
+  const rings = [0.35, 0.55, 0.8, 1.05].map((k, i) => ({
+    k,
+    opacity: 0.22 - i * 0.04,
+    color: new THREE.Color().setHSL(0.08 - i * 0.02, 0.65, 0.28 + i * 0.06),
+  }));
 
   return (
     <group position={[0.45, -2.0, 0]}>
@@ -310,19 +315,41 @@ function Formation({ temp, steam }: { temp: number; steam: number }) {
           <meshStandardMaterial color={layer.c} roughness={0.92} metalness={0.05} />
         </mesh>
       ))}
-      {/* Cut face */}
       <mesh position={[2.75, 0.3, 0]}>
         <boxGeometry args={[0.02, 2.4, 3.55]} />
         <meshStandardMaterial color="#d4a05a" emissive="#d4a05a" emissiveIntensity={0.2} />
       </mesh>
-      <mesh position={[0.2, 0.2, 0]} scale={[s * 1.5, s * 0.7, s * 1.15]}>
+      {/* Deviated trajectory toward pay */}
+      <mesh position={[0.55, 0.15, 0.35]} rotation={[0.35, 0, 0.18]}>
+        <cylinderGeometry args={[0.035, 0.035, 2.8, 12]} />
+        <meshStandardMaterial color="#8b9199" metalness={0.7} roughness={0.3} />
+      </mesh>
+      {/* Pay / production zone */}
+      <mesh position={[0.2, -0.55, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.55, 0.06, 8, 24]} />
+        <meshStandardMaterial color="#c45c4a" emissive="#c45c4a" emissiveIntensity={0.2} />
+      </mesh>
+      {rings.map((r) => (
+        <mesh key={r.k} position={[0.2, 0.05, 0]} scale={[s * r.k * 1.6, s * r.k * 0.55, s * r.k * 1.25]}>
+          <sphereGeometry args={[0.85, 28, 18]} />
+          <meshStandardMaterial
+            color={r.color}
+            emissive={r.color}
+            emissiveIntensity={0.35}
+            transparent
+            opacity={r.opacity}
+            depthWrite={false}
+          />
+        </mesh>
+      ))}
+      <mesh position={[0.2, 0.2, 0]} scale={[s * 1.15, s * 0.55, s * 0.95]}>
         <sphereGeometry args={[0.85, 48, 32]} />
         <meshStandardMaterial
           color={heat}
           emissive={heat}
-          emissiveIntensity={0.65}
+          emissiveIntensity={0.7}
           transparent
-          opacity={0.4}
+          opacity={0.42}
           roughness={0.3}
           depthWrite={false}
         />
@@ -455,7 +482,7 @@ function Scene({ state }: { state: TwinState }) {
         <meshStandardMaterial color="#14161a" roughness={0.95} />
       </mesh>
 
-      <Formation temp={state.reservoir_temperature} steam={state.steam_volume} />
+      <Formation temp={state.reservoir_temperature} steam={state.steam_volume} radius={state.heated_radius_m ?? 12} />
       <CasingString />
       <WellheadTree />
       <OilFlow mobility={mobility} rate={state.oil_rate_bopd} />
