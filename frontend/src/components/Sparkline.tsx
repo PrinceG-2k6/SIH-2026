@@ -1,7 +1,7 @@
-/** Tiny inline sparkline from a number series */
+/** Tiny inline sparkline styled with Newsprint ink precision */
 export function Sparkline({
   values,
-  color = "var(--accent)",
+  color = "#111111",
   width = 120,
   height = 28,
 }: {
@@ -31,17 +31,17 @@ export function Sparkline({
       <polyline
         fill="none"
         stroke={color}
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-        strokeLinecap="round"
+        strokeWidth="1.75"
+        strokeLinejoin="miter"
+        strokeLinecap="square"
         points={pts}
-        opacity={0.9}
       />
-      <circle
-        cx={width}
-        cy={height - ((last - min) / span) * (height - 4) - 2}
-        r="2.5"
-        fill={up ? "var(--good)" : "var(--warn)"}
+      <rect
+        x={width - 2}
+        y={height - ((last - min) / span) * (height - 4) - 4}
+        width="4"
+        height="4"
+        fill={up ? "#1b6a38" : "#CC0000"}
       />
     </svg>
   );

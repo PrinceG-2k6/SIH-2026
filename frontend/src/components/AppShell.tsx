@@ -1,69 +1,129 @@
-import type { PageId } from "../types";
-
-const PAGES: { id: PageId; label: string }[] = [
-  { id: "overview", label: "Overview" },
-  { id: "lab", label: "Field lab" },
-  { id: "whatif", label: "What-if" },
-  { id: "twin", label: "Twin" },
-  { id: "alerts", label: "Alerts" },
-  { id: "models", label: "Models" },
-  { id: "data", label: "Data" },
-];
+import React from "react";
+import type { DashboardData, PageId, WellSummary } from "../types";
+import { NewsprintHeader } from "./NewsprintHeader";
+import { NewsprintMarquee } from "./NewsprintMarquee";
+import { Sidebar } from "./Sidebar";
 
 interface Props {
   page: PageId;
   onPageChange: (page: PageId) => void;
-  wells: { well_id: string; name: string }[];
+  wells: WellSummary[];
   selectedWell: string;
   onWellChange: (id: string) => void;
   onAnalyze: () => void;
   loading?: boolean;
+  data?: DashboardData | null;
+  children: React.ReactNode;
 }
 
-export function AppShell({ page, onPageChange, wells, selectedWell, onWellChange, onAnalyze, loading }: Props) {
+export function AppShell({
+  page,
+  onPageChange,
+  wells,
+  selectedWell,
+  onWellChange,
+  onAnalyze,
+  loading,
+  data,
+  children,
+}: Props) {
+  const alertCount = data?.alerts?.alert_count ?? 0;
+  const bopd = data?.current_state?.oil_rate_bopd;
+  const temp = data?.current_state?.reservoir_temperature;
+  const sor = data?.current_state?.sor;
+
   return (
-    <header className="border-b border-[var(--line)]">
-      <div className="mx-auto flex max-w-[1440px] items-start justify-between gap-6 px-6 pt-6">
-        <div className="min-w-0">
-          <div className="flex items-center gap-3">
-            <span className="tick-mark" />
-            <p className="eyebrow">SIH26120 / Oil India / Origin</p>
+    <div className="flex min-h-screen bg-[#F9F9F7] text-[#111111]">
+      {/* Newspaper Left Column Sidebar */}
+      <Sidebar
+        page={page}
+        onPageChange={onPageChange}
+        wells={wells}
+        selectedWell={selectedWell}
+        onWellChange={onWellChange}
+        alertCount={alertCount}
+      />
+
+      {/* Main Newspaper Broad Area */}
+      <div className="flex flex-1 flex-col min-w-0">
+        <NewsprintHeader
+          page={page}
+          onPageChange={onPageChange}
+          selectedWell={selectedWell}
+          onAnalyze={onAnalyze}
+          loading={loading}
+        />
+
+        {/* Real-time Ticker Crawl */}
+        <NewsprintMarquee
+          wellId={selectedWell}
+          bopd={bopd}
+          temp={temp}
+          sor={sor}
+          alertCount={alertCount}
+        />
+
+        {/* Dynamic Editorial Content Area */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
+          {children}
+        </main>
+
+        {/* Newspaper Colophon & Footer */}
+        <footer className="mt-12 border-t-4 border-[#111111] bg-[#F9F9F7] px-6 py-8 font-serif text-[#111111]">
+          <div className="mx-auto max-w-[1600px]">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-6 border-b border-[#111111]">
+              <div className="md:col-span-2">
+                <h4 className="font-serif text-xl font-bold uppercase tracking-wider">
+                  STRATA — Deep Sandstone Gazette
+                </h4>
+                <p className="mt-2 font-body text-sm text-[#525252] leading-relaxed max-w-md">
+                  Autonomous decision-support engine engineered for cyclic steam stimulation and sucker rod pump optimization in extra-heavy crude reservoirs.
+                </p>
+                <div className="mt-4 font-mono text-[10px] text-[#737373] tracking-widest uppercase">
+                  Published by Team STRATA · SIH-26120 · Oil India Limited
+                </div>
+              </div>
+
+              <div>
+                <h5 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111] mb-2">
+                  Operating Sections
+                </h5>
+                <ul className="space-y-1 font-mono text-xs text-[#525252]">
+                  <li><button onClick={() => onPageChange("landing")} className="hover:text-[#CC0000]">§ 00 Front Page</button></li>
+                  <li><button onClick={() => onPageChange("overview")} className="hover:text-[#CC0000]">§ 01 Field Overview</button></li>
+                  <li><button onClick={() => onPageChange("lab")} className="hover:text-[#CC0000]">§ 02 Connected Field Lab</button></li>
+                  <li><button onClick={() => onPageChange("whatif")} className="hover:text-[#CC0000]">§ 03 What-If Simulator</button></li>
+                  <li><button onClick={() => onPageChange("twin")} className="hover:text-[#CC0000]">§ 04 3D Kinematics Twin</button></li>
+                </ul>
+              </div>
+
+              <div>
+                <h5 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111] mb-2">
+                  Compliance & Specs
+                </h5>
+                <p className="font-mono text-[11px] text-[#737373] leading-normal">
+                  Field: Baghewala Extra-Heavy Oil<br />
+                  Permeability: 2,400 mD<br />
+                  Oil Viscosity: 1,000–5,000 cP<br />
+                  Thermal Process: CSS Cycles I–IV<br />
+                  Surface Lift: Class-III Sucker Rod Pump
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-wrap items-center justify-between gap-4 font-mono text-[10px] text-[#737373]">
+              <p>
+                © 2026 STRATA DIGITAL TWIN. SYNTHETIC BENCHMARK DATA. ALL METRICS CALCULATED ACCORDING TO OIL FIELD EQUATIONS.
+              </p>
+              <div className="flex items-center space-x-4">
+                <span>PRESS EDITION: VOL 24.1</span>
+                <span>·</span>
+                <span className="text-[#CC0000] font-bold">ALL SYSTEMS VERIFIED</span>
+              </div>
+            </div>
           </div>
-          <h1 className="serif mt-2 text-[2.4rem] font-semibold leading-[1.05] tracking-tight text-[var(--ink)] md:text-[2.75rem]">
-            ORIGIN
-          </h1>
-          <p className="mt-1 max-w-md text-sm text-[var(--ink-muted)]">
-            Well-to-surface digital twin for cyclic steam and sucker-rod operations — Baghewala.
-          </p>
-        </div>
-
-        <div className="flex shrink-0 flex-wrap items-end gap-3 pt-1">
-          <label className="block">
-            <span className="eyebrow mb-1 block text-[var(--ink-faint)]">Well</span>
-            <select value={selectedWell} onChange={(e) => onWellChange(e.target.value)} className="min-w-[170px]">
-              {wells.map((w) => (
-                <option key={w.well_id} value={w.well_id}>{w.name}</option>
-              ))}
-            </select>
-          </label>
-          <button type="button" onClick={onAnalyze} disabled={loading} className="btn-primary">
-            {loading ? "Working…" : "Analyze"}
-          </button>
-        </div>
+        </footer>
       </div>
-
-      <nav className="mx-auto mt-5 flex max-w-[1440px] overflow-x-auto px-6">
-        {PAGES.map((p) => (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => onPageChange(p.id)}
-            className={`nav-link ${page === p.id ? "nav-link-active" : ""}`}
-          >
-            {p.label}
-          </button>
-        ))}
-      </nav>
-    </header>
+    </div>
   );
 }

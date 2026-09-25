@@ -18,11 +18,13 @@ interface Props {
 }
 
 const tip = {
-  background: "#08090b",
-  border: "1px solid rgba(212,160,90,0.3)",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #111111",
+  boxShadow: "3px 3px 0px #111111",
   borderRadius: 0,
   fontFamily: "JetBrains Mono, monospace",
   fontSize: 11,
+  color: "#111111",
 };
 
 const FAULTS = [
@@ -183,16 +185,17 @@ export function TwinLabPage({ wellId }: Props) {
 
   return (
     <div className="fade-in space-y-10 pb-12">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-[#111111] pb-4">
         <div>
-          <div className="flex items-center gap-3">
-            <span className="tick-mark" />
-            <p className="eyebrow text-[var(--accent)]">Connected physics twin</p>
-          </div>
-          <h2 className="serif mt-2 text-4xl font-semibold text-[var(--ink)]">Field lab</h2>
-          <p className="mt-2 max-w-2xl text-sm text-[var(--ink-muted)]">
-            {String(twin.name)} · {String(twin.location)} · {String(twin.formation)} · {String(twin.depth_m)} m.
-            Synthetic physics-informed mode — not OIL-calibrated.
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            CONNECTED PHYSICS TWIN · EXPERIMENTAL LAB
+          </span>
+          <h2 className="mt-1 font-serif text-4xl sm:text-5xl font-black text-[#111111] uppercase">
+            Field Laboratory & Deep Twin
+          </h2>
+          <p className="mt-2 font-body text-sm text-[#525252] max-w-2xl leading-relaxed">
+            {String(twin.name)} · {String(twin.location)} · {String(twin.formation)} · {String(twin.depth_m)} m depth.
+            Physics-informed surrogate simulation engine with closed-loop parameter re-calibration.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

@@ -16,12 +16,14 @@ interface TrendChartsProps {
   history: HistoryPoint[];
 }
 
-const tipStyle = {
-  background: "rgba(8,9,11,0.96)",
-  border: "1px solid rgba(212,160,90,0.35)",
+const newsprintTipStyle = {
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #111111",
+  boxShadow: "3px 3px 0px #111111",
   borderRadius: 0,
   fontSize: 11,
   fontFamily: "JetBrains Mono, monospace",
+  color: "#111111",
 };
 
 export function TrendCharts({ history }: TrendChartsProps) {
@@ -33,89 +35,152 @@ export function TrendCharts({ history }: TrendChartsProps) {
   const avgProd = data.reduce((s, d) => s + d.oil_rate_bopd, 0) / Math.max(data.length, 1);
 
   return (
-    <div className="space-y-12">
-      <div>
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+    <div className="space-y-10">
+      {/* Chart 1: Oil vs Temperature */}
+      <div className="border border-[#111111] bg-white p-5">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[#111111] pb-3">
           <div>
-            <p className="eyebrow text-[var(--accent)]">Thermal offtake</p>
-            <p className="mt-1 text-sm text-[var(--ink-muted)]">
-              Oil rate against reservoir temperature — CSS cycle signature
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+              CHRONOLOGY · PRODUCTION VS THERMAL CORE
+            </span>
+            <p className="mt-1 font-serif text-lg font-bold text-[#111111]">
+              Thermal Offtake Profile (CSS Cycle Signature)
             </p>
           </div>
-          <span className="mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
-            μ = {avgProd.toFixed(1)} BOPD
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
+            MEAN: {avgProd.toFixed(1)} BOPD
           </span>
         </div>
-        <div className="h-[300px] w-full">
+
+        <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
               <defs>
-                <linearGradient id="oilFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#d4a05a" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="#d4a05a" stopOpacity={0} />
+                <linearGradient id="oilInkFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#111111" stopOpacity={0.15} />
+                  <stop offset="100%" stopColor="#111111" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="rgba(232,226,214,0.04)" vertical={false} />
-              <XAxis dataKey="date" tick={{ fill: "#6b665c", fontSize: 10, fontFamily: "JetBrains Mono" }} axisLine={false} tickLine={false} />
-              <YAxis yAxisId="l" tick={{ fill: "#6b665c", fontSize: 10, fontFamily: "JetBrains Mono" }} axisLine={false} tickLine={false} width={36} />
-              <YAxis yAxisId="r" orientation="right" tick={{ fill: "#6b665c", fontSize: 10 }} axisLine={false} tickLine={false} width={32} />
-              <Tooltip contentStyle={tipStyle} />
-              <Legend wrapperStyle={{ fontSize: 11, color: "#9a9488", fontFamily: "JetBrains Mono" }} />
-              <ReferenceLine yAxisId="l" y={avgProd} stroke="rgba(232,226,214,0.22)" strokeDasharray="3 5" />
+              <CartesianGrid stroke="#E5E5E0" strokeDasharray="2 2" vertical={false} />
+              <XAxis
+                dataKey="date"
+                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                axisLine={{ stroke: "#111111" }}
+                tickLine={{ stroke: "#111111" }}
+              />
+              <YAxis
+                yAxisId="l"
+                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                axisLine={{ stroke: "#111111" }}
+                tickLine={{ stroke: "#111111" }}
+                width={38}
+              />
+              <YAxis
+                yAxisId="r"
+                orientation="right"
+                tick={{ fill: "#CC0000", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                axisLine={{ stroke: "#CC0000" }}
+                tickLine={{ stroke: "#CC0000" }}
+                width={36}
+              />
+              <Tooltip contentStyle={newsprintTipStyle} />
+              <Legend
+                wrapperStyle={{
+                  fontSize: 11,
+                  fontFamily: "JetBrains Mono",
+                  paddingTop: 8,
+                }}
+              />
+              <ReferenceLine
+                yAxisId="l"
+                y={avgProd}
+                stroke="#737373"
+                strokeDasharray="4 4"
+                label={{ value: "AVG", fill: "#737373", fontSize: 10, position: "insideTopLeft" }}
+              />
               <Area
                 yAxisId="l"
                 type="monotone"
                 dataKey="oil_rate_bopd"
-                name="Oil (BOPD)"
-                stroke="#d4a05a"
-                fill="url(#oilFill)"
-                strokeWidth={2.25}
-                animationDuration={1100}
+                name="Oil Offtake (BOPD)"
+                stroke="#111111"
+                fill="url(#oilInkFill)"
+                strokeWidth={2}
+                animationDuration={800}
               />
               <Line
                 yAxisId="r"
                 type="monotone"
                 dataKey="reservoir_temperature"
-                name="Temp (°C)"
-                stroke="#7a9bb8"
-                strokeWidth={1.75}
+                name="Reservoir Temp (°C)"
+                stroke="#CC0000"
+                strokeWidth={2}
                 dot={false}
-                animationDuration={1300}
+                animationDuration={800}
               />
             </AreaChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div>
-        <div className="mb-4">
-          <p className="eyebrow text-[var(--accent)]">Efficiency · reliability</p>
-          <p className="mt-1 text-sm text-[var(--ink-muted)]">
-            Steam-oil ratio and failure probability across the demo window
-          </p>
+      {/* Chart 2: SOR vs Failure Risk */}
+      <div className="border border-[#111111] bg-white p-5">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[#111111] pb-3">
+          <div>
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+              EQUIPMENT INTEGRITY & STEAM ECONOMY
+            </span>
+            <p className="mt-1 font-serif text-lg font-bold text-[#111111]">
+              Steam-to-Oil Ratio vs Mechanical Failure Probability
+            </p>
+          </div>
         </div>
-        <div className="h-[260px] w-full">
+
+        <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%" minWidth={0}>
             <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
               <defs>
-                <linearGradient id="failFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#c45c4a" stopOpacity={0.32} />
-                  <stop offset="100%" stopColor="#c45c4a" stopOpacity={0} />
+                <linearGradient id="failRedFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#CC0000" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="#CC0000" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="rgba(232,226,214,0.04)" vertical={false} />
-              <XAxis dataKey="date" tick={{ fill: "#6b665c", fontSize: 10 }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fill: "#6b665c", fontSize: 10 }} axisLine={false} tickLine={false} width={36} />
-              <Tooltip contentStyle={tipStyle} />
-              <Legend wrapperStyle={{ fontSize: 11, color: "#9a9488" }} />
-              <Line type="monotone" dataKey="sor" name="SOR" stroke="#9a9488" strokeWidth={1.75} dot={false} />
+              <CartesianGrid stroke="#E5E5E0" strokeDasharray="2 2" vertical={false} />
+              <XAxis
+                dataKey="date"
+                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                axisLine={{ stroke: "#111111" }}
+                tickLine={{ stroke: "#111111" }}
+              />
+              <YAxis
+                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                axisLine={{ stroke: "#111111" }}
+                tickLine={{ stroke: "#111111" }}
+                width={38}
+              />
+              <Tooltip contentStyle={newsprintTipStyle} />
+              <Legend
+                wrapperStyle={{
+                  fontSize: 11,
+                  fontFamily: "JetBrains Mono",
+                  paddingTop: 8,
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="sor"
+                name="SOR (Steam/Oil)"
+                stroke="#525252"
+                strokeWidth={2}
+                dot={false}
+              />
               <Area
                 type="monotone"
                 dataKey="failure_probability"
-                name="Failure prob."
-                stroke="#c45c4a"
-                fill="url(#failFill)"
-                strokeWidth={1.75}
+                name="Failure Probability"
+                stroke="#CC0000"
+                fill="url(#failRedFill)"
+                strokeWidth={2}
               />
             </AreaChart>
           </ResponsiveContainer>

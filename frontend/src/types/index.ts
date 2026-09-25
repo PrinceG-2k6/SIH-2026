@@ -1,4 +1,4 @@
-export type PageId = "overview" | "whatif" | "twin" | "lab" | "alerts" | "models" | "data";
+export type PageId = "landing" | "overview" | "whatif" | "twin" | "lab" | "alerts" | "models" | "data";
 
 export interface WellSummary {
   well_id: string;

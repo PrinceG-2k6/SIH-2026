@@ -1,11 +1,11 @@
-/** Circular progress gauge — unique visual vs number boxes */
+/** Circular progress meter styled with Newsprint editorial precision */
 export function Gauge({
   value,
   max = 100,
   label,
   unit = "",
   tone = "accent",
-  size = 112,
+  size = 110,
 }: {
   value: number;
   max?: number;
@@ -15,22 +15,24 @@ export function Gauge({
   size?: number;
 }) {
   const colors = {
-    accent: "var(--accent)",
-    good: "var(--good)",
-    warn: "var(--warn)",
-    bad: "var(--bad)",
-    info: "var(--info)",
+    accent: "#CC0000",
+    good: "#1b6a38",
+    warn: "#a65800",
+    bad: "#CC0000",
+    info: "#111111",
   };
-  const stroke = colors[tone];
-  const r = 42;
+  const stroke = colors[tone] || "#111111";
+  const r = 38;
   const c = 2 * Math.PI * r;
   const pct = Math.min(1, Math.max(0, value / max));
   const dash = c * pct;
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center justify-center p-3 border border-[#111111] bg-[#F9F9F7] min-w-[120px]">
       <svg width={size} height={size} viewBox="0 0 100 100" className="gauge-ring">
-        <circle cx="50" cy="50" r={r} fill="none" stroke="rgba(232,226,214,0.08)" strokeWidth="6" />
+        {/* Background Track */}
+        <circle cx="50" cy="50" r={r} fill="none" stroke="#E5E5E0" strokeWidth="6" />
+        {/* Progress Value */}
         <circle
           cx="50"
           cy="50"
@@ -38,17 +40,19 @@ export function Gauge({
           fill="none"
           stroke={stroke}
           strokeWidth="6"
-          strokeLinecap="butt"
+          strokeLinecap="square"
           strokeDasharray={`${dash} ${c - dash}`}
-          style={{ transition: "stroke-dasharray 800ms cubic-bezier(0.22,1,0.36,1)" }}
+          style={{ transition: "stroke-dasharray 600ms cubic-bezier(0.22,1,0.36,1)" }}
         />
       </svg>
-      <div className="-mt-[4.6rem] mb-8 text-center">
-        <div className="mono text-xl text-[var(--ink)]">
+      <div className="-mt-[4.2rem] mb-6 text-center">
+        <div className="font-mono text-lg font-bold text-[#111111]">
           {typeof value === "number" ? value.toFixed(value >= 100 ? 0 : 1) : value}
-          <span className="text-[10px] text-[var(--ink-faint)]"> {unit}</span>
+          <span className="text-[10px] text-[#737373]"> {unit}</span>
         </div>
-        <div className="mt-0.5 text-[11px] text-[var(--ink-faint)]">{label}</div>
+        <div className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#525252]">
+          {label}
+        </div>
       </div>
     </div>
   );

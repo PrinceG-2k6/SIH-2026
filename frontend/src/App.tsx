@@ -4,6 +4,7 @@ import { AppShell } from "./components/AppShell";
 import { AlertsPage } from "./pages/AlertsPage";
 import { DataPage } from "./pages/DataPage";
 import { DigitalTwinPage } from "./pages/DigitalTwinPage";
+import { LandingPage } from "./pages/LandingPage";
 import { ModelsPage } from "./pages/ModelsPage";
 import { OverviewPage } from "./pages/OverviewPage";
 import { TwinLabPage } from "./pages/TwinLabPage";
@@ -11,7 +12,7 @@ import { WhatIfPage } from "./pages/WhatIfPage";
 import type { DashboardData, PageId, WellSummary } from "./types";
 
 export default function App() {
-  const [page, setPage] = useState<PageId>("overview");
+  const [page, setPage] = useState<PageId>("landing");
   const [wells, setWells] = useState<WellSummary[]>([]);
   const [selectedWell, setSelectedWell] = useState("BGW-01");
   const [data, setData] = useState<DashboardData | null>(null);
@@ -25,7 +26,7 @@ export default function App() {
       const dashboard = await getDashboard(wellId);
       setData(dashboard);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load dashboard");
+      setError(e instanceof Error ? e.message : "Failed to load dashboard data");
     } finally {
       setLoading(false);
     }
@@ -45,39 +46,55 @@ export default function App() {
   }, [selectedWell, loadDashboard]);
 
   return (
-    <div className="min-h-screen text-[var(--ink)]">
-      <AppShell
-        page={page}
-        onPageChange={setPage}
-        wells={wells}
-        selectedWell={selectedWell}
-        onWellChange={setSelectedWell}
-        onAnalyze={() => loadDashboard(selectedWell)}
-        loading={loading}
-      />
-      <main className="mx-auto max-w-[1440px] space-y-6 px-6 py-8">
-        {error && (
-          <div className="plate border-[rgba(196,92,74,0.45)] px-5 py-3 text-sm text-[var(--bad)]">
-            {error}
-          </div>
-        )}
-        {loading && (
-          <div className="plate px-5 py-3 text-sm text-[var(--ink-muted)]">
-            Running prediction + constrained CSS/SRP optimization for{" "}
-            <span className="mono text-[var(--accent)]">{selectedWell}</span>…
-          </div>
-        )}
-        {data && page === "overview" && <OverviewPage data={data} wellId={selectedWell} />}
-        {page === "lab" && <TwinLabPage wellId={selectedWell} />}
-        {data && page === "whatif" && <WhatIfPage wellId={selectedWell} dashboard={data} />}
-        {page === "twin" && <DigitalTwinPage wellId={selectedWell} dashboard={data} />}
-        {data && page === "alerts" && <AlertsPage alerts={data.alerts} loading={false} wellId={selectedWell} />}
-        {data && page === "models" && <ModelsPage metrics={data.model_metrics} />}
-        {page === "data" && <DataPage />}
-        {!loading && !data && !error && (
-          <p className="text-sm text-[var(--ink-faint)]">Waiting for dashboard data…</p>
-        )}
-      </main>
-    </div>
+    <AppShell
+      page={page}
+      onPageChange={setPage}
+      wells={wells}
+      selectedWell={selectedWell}
+      onWellChange={setSelectedWell}
+      onAnalyze={() => loadDashboard(selectedWell)}
+      loading={loading}
+      data={data}
+    >
+      {/* Error Notice */}
+      {error && (
+        <div className="mb-6 border-2 border-[#CC0000] bg-[#FFF5F5] p-4 font-mono text-xs text-[#CC0000]">
+          <span className="font-bold mr-2">[TELECOMMUNICATION INTERRUPTION]</span>
+          {error}
+        </div>
+      )}
+
+      {/* Loading Notice */}
+      {loading && !data && (
+        <div className="mb-6 border border-[#111111] bg-[#F5F5F5] p-4 font-mono text-xs text-[#525252]">
+          COMPUTING SURROGATE PREDICTION & CONSTRAINED OPTIMIZATION FOR{" "}
+          <span className="font-bold text-[#111111]">{selectedWell}</span>…
+        </div>
+      )}
+
+      {/* Active Page Routing */}
+      {page === "landing" && (
+        <LandingPage
+          onNavigate={setPage}
+          dashboard={data}
+          selectedWell={selectedWell}
+        />
+      )}
+      {data && page === "overview" && <OverviewPage data={data} wellId={selectedWell} />}
+      {page === "lab" && <TwinLabPage wellId={selectedWell} />}
+      {data && page === "whatif" && <WhatIfPage wellId={selectedWell} dashboard={data} />}
+      {page === "twin" && <DigitalTwinPage wellId={selectedWell} dashboard={data} />}
+      {data && page === "alerts" && (
+        <AlertsPage alerts={data.alerts} loading={false} wellId={selectedWell} />
+      )}
+      {data && page === "models" && <ModelsPage metrics={data.model_metrics} />}
+      {page === "data" && <DataPage />}
+
+      {!loading && !data && !error && page !== "landing" && (
+        <div className="border border-[#111111] bg-[#F9F9F7] p-8 text-center font-mono text-xs text-[#737373]">
+          WAITING FOR TELEMETRY STREAM FROM BOREHOLE SERVER…
+        </div>
+      )}
+    </AppShell>
   );
 }

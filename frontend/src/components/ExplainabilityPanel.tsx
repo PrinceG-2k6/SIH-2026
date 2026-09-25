@@ -16,17 +16,37 @@ export function ExplainabilityPanel({ wellId }: Props) {
   if (!data) return null;
 
   return (
-    <section className="fade-in plate p-6 md:p-8">
-      <div className="flex items-center gap-3">
-        <span className="tick-mark" />
-        <p className="eyebrow text-[var(--accent)]">Attribution · {data.method}</p>
+    <section className="border border-[#111111] bg-white p-6 md:p-8">
+      <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-[#111111] pb-4">
+        <div>
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            SHAPLEY ATTRIBUTION ENGINE · {data.method}
+          </span>
+          <h3 className="mt-1 font-serif text-3xl font-bold text-[#111111]">
+            Machine Learning Decision Explainability
+          </h3>
+        </div>
+        <p className="font-mono text-xs text-[#737373]">
+          SURROGATE MODEL ATTRIBUTION V1.4
+        </p>
       </div>
-      <h3 className="serif mt-2 text-2xl font-semibold text-[var(--ink)]">Why this prediction</h3>
+
       <div className="mt-8 grid gap-10 lg:grid-cols-2">
-        <ContribTable title="Production drivers" note={data.production_forecast.note} rows={data.production_forecast.contributions} />
-        <ContribTable title="Failure risk drivers" note={data.failure_risk.note} rows={data.failure_risk.contributions} />
+        <ContribTable
+          title="Production Forecast Drivers"
+          note={data.production_forecast.note}
+          rows={data.production_forecast.contributions}
+        />
+        <ContribTable
+          title="Equipment Failure Risk Drivers"
+          note={data.failure_risk.note}
+          rows={data.failure_risk.contributions}
+        />
       </div>
-      <p className="mt-6 mono text-[10px] text-[var(--ink-faint)]">{data.disclaimer}</p>
+
+      <p className="mt-8 font-mono text-[10px] text-[#737373] border-t border-[#E5E5E0] pt-3 italic">
+        {data.disclaimer}
+      </p>
     </section>
   );
 }
@@ -43,33 +63,33 @@ function ContribTable({
   const maxAbs = Math.max(...rows.map((r) => Math.abs(r.shap_value)), 0.001);
 
   return (
-    <div>
-      <h4 className="eyebrow text-[var(--accent)]">{title}</h4>
-      <p className="mt-1 text-xs text-[var(--ink-faint)]">{note}</p>
+    <div className="border border-[#111111] bg-[#F9F9F7] p-5">
+      <div className="border-b border-[#111111] pb-2">
+        <h4 className="font-serif text-lg font-bold text-[#111111]">{title}</h4>
+        <p className="mt-0.5 font-body text-xs text-[#525252]">{note}</p>
+      </div>
+
       <div className="mt-5 space-y-4">
         {rows.map((r) => {
           const pct = (Math.abs(r.shap_value) / maxAbs) * 100;
           const pos = r.shap_value > 0;
           return (
-            <div key={r.feature}>
-              <div className="mb-1.5 flex justify-between gap-2 text-xs">
-                <span className="text-[var(--ink-muted)]">{r.feature.replace(/_/g, " ")}</span>
-                <span className={`mono ${pos ? "text-[var(--good)]" : "text-[var(--warn)]"}`}>
+            <div key={r.feature} className="font-mono text-xs">
+              <div className="mb-1 flex justify-between gap-2">
+                <span className="font-medium uppercase text-[#111111]">
+                  {r.feature.replace(/_/g, " ")}
+                </span>
+                <span className={`font-bold ${pos ? "text-[#1b6a38]" : "text-[#CC0000]"}`}>
+                  {pos ? "+" : ""}
                   {r.shap_value.toFixed(4)}
                 </span>
               </div>
-              <div className="relative h-1 bg-[rgba(232,226,214,0.06)]">
+              <div className="h-2 w-full bg-[#E5E5E0] overflow-hidden">
                 <div
-                  className="absolute top-0 h-full"
-                  style={
-                    pos
-                      ? { width: `${pct / 2}%`, left: "50%", background: "var(--good)" }
-                      : { width: `${pct / 2}%`, right: "50%", left: "auto", background: "var(--warn)" }
-                  }
+                  className={`h-full ${pos ? "bg-[#111111]" : "bg-[#CC0000]"}`}
+                  style={{ width: `${Math.min(100, pct)}%` }}
                 />
-                <div className="absolute left-1/2 top-0 h-full w-px bg-[var(--line-strong)]" />
               </div>
-              <p className="mt-1 text-[10px] text-[var(--ink-faint)]">{r.direction}</p>
             </div>
           );
         })}

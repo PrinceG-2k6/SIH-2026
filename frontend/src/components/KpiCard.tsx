@@ -5,27 +5,29 @@ interface KpiCardProps {
   tone?: "default" | "good" | "warn" | "bad";
 }
 
-const toneBorder = {
-  default: "border-[var(--line)]",
-  good: "border-[rgba(111,159,122,0.35)]",
-  warn: "border-[rgba(201,162,39,0.4)]",
-  bad: "border-[rgba(196,92,74,0.45)]",
+const toneStyles = {
+  default: "border-l-4 border-l-[#111111]",
+  good: "border-l-4 border-l-[#1b6a38]",
+  warn: "border-l-4 border-l-[#a65800]",
+  bad: "border-l-4 border-l-[#CC0000]",
 };
 
 const toneValue = {
-  default: "text-[var(--ink)]",
-  good: "text-[var(--good)]",
-  warn: "text-[var(--warn)]",
-  bad: "text-[var(--bad)]",
+  default: "text-[#111111]",
+  good: "text-[#1b6a38]",
+  warn: "text-[#a65800]",
+  bad: "text-[#CC0000]",
 };
 
 export function KpiCard({ label, value, unit, tone = "default" }: KpiCardProps) {
   return (
-    <div className={`border-l-2 bg-[rgba(18,20,26,0.55)] px-3 py-3 ${toneBorder[tone]}`}>
-      <div className="label-caps">{label}</div>
-      <div className={`kpi-value mt-1 ${toneValue[tone]}`}>
+    <div className={`border border-[#111111] bg-[#F9F9F7] px-4 py-3 ${toneStyles[tone]}`}>
+      <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#525252]">
+        {label}
+      </div>
+      <div className={`mt-1 font-mono text-2xl font-bold ${toneValue[tone]}`}>
         {value}
-        {unit && <span className="ml-1 text-xs font-normal text-[var(--ink-faint)]">{unit}</span>}
+        {unit && <span className="ml-1 text-xs font-normal text-[#737373]">{unit}</span>}
       </div>
     </div>
   );

@@ -29,178 +29,243 @@ export function OverviewPage({ data, wellId }: Props) {
 
   const story =
     state.reservoir_temperature < 52 && state.oil_viscosity > 500
-      ? "Cool reservoir, elevated viscosity — CSS heat and SRP tuning must move together."
-      : "Producing CSS cycle. The optimizer balances offtake against SOR and rod risk.";
+      ? "Cool subterranean reservoir temperatures and elevated bitumen viscosity demand immediate synchronized CSS thermal injection and SRP mechanical stroke tuning."
+      : "Active CSS thermal soak and production phase. The autonomous optimizer dynamically balances volumetric crude recovery against steam-oil ratio (SOR) and rod floating hazards.";
 
   return (
-    <div className="fade-in space-y-14 pb-12">
+    <div className="fade-in space-y-12">
+      {/* Live Stream Bar */}
       <LiveStreamBar wellId={wellId} />
 
-      {/* Hero composition */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute -right-8 top-0 h-full w-1/2 opacity-[0.07]">
-          <svg viewBox="0 0 200 200" className="h-full w-full" preserveAspectRatio="xMaxYMid slice">
-            <circle cx="140" cy="80" r="70" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            <circle cx="140" cy="80" r="48" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            <path d="M140 10 L140 150 M70 80 L210 80" stroke="currentColor" strokeWidth="0.4" />
-          </svg>
+      {/* Hero Broadsheet Banner */}
+      <section className="border-b-4 border-[#111111] pb-8">
+        <div className="flex flex-wrap items-center justify-between border-b border-[#111111] pb-2 font-mono text-[10px] uppercase tracking-widest text-[#737373]">
+          <span className="font-bold text-[#CC0000]">OPERATIONAL DISPATCH · BOREHOLE {wellId}</span>
+          <span>CSS STIMULATION CYCLE: #{state.css_cycle_id}</span>
+          <span>FORMATION: JODHPUR SANDSTONE</span>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="tick-mark" />
-          <p className="eyebrow text-[var(--accent)]">
-            Baghewala · {wellId} · CSS cycle {state.css_cycle_id}
-          </p>
-        </div>
+        <div className="mt-6 grid gap-8 lg:grid-cols-12 items-start">
+          {/* Main Production Metric & Lead Story (7 cols) */}
+          <div className="lg:col-span-7 space-y-4 lg:border-r border-[#111111] lg:pr-8">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#525252]">
+              CURRENT MEASURED OFFTAKE
+            </span>
 
-        <div className="mt-6 grid items-end gap-12 lg:grid-cols-[1.35fr_1fr]">
-          <div>
-            <p className="serif text-[clamp(3.5rem,8vw,5.5rem)] font-semibold leading-[0.92] tracking-tight text-[var(--ink)]">
-              <AnimatedNumber value={state.oil_rate_bopd} decimals={1} />
-              <span className="ml-3 align-baseline font-sans text-xl font-normal tracking-normal text-[var(--ink-faint)]">
+            <div className="flex items-baseline">
+              <span className="font-serif text-6xl sm:text-7xl lg:text-8xl font-black tracking-tight text-[#111111] leading-none">
+                <AnimatedNumber value={state.oil_rate_bopd} decimals={1} />
+              </span>
+              <span className="ml-3 font-mono text-xl sm:text-2xl font-bold text-[#737373]">
                 BOPD
               </span>
+            </div>
+
+            <div className="h-[2px] w-24 bg-[#CC0000]" />
+
+            <p className="font-body text-sm sm:text-base text-[#111111] leading-relaxed max-w-2xl text-justify">
+              {story}
             </p>
-            <div className="hairline mt-5 max-w-md" />
-            <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-[var(--ink-muted)]">{story}</p>
-            <div className="mt-8 flex flex-wrap items-end gap-10">
-              <div>
-                <p className="eyebrow mb-2">90-day offtake</p>
-                <Sparkline values={oilSeries} width={180} height={40} />
+
+            {/* Quick Index Metrics */}
+            <div className="pt-4 flex flex-wrap items-center gap-8 border-t border-[#E5E5E0]">
+              <div className="border border-[#111111] bg-white p-3 min-w-[140px]">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373]">
+                  90-Day Trend
+                </div>
+                <div className="mt-1">
+                  <Sparkline values={oilSeries} width={130} height={32} />
+                </div>
               </div>
-              <div>
-                <p className="eyebrow">AI vs current</p>
-                <p className={`mono mt-1 text-2xl ${prodDelta >= 0 ? "text-[var(--good)]" : "text-[var(--warn)]"}`}>
+
+              <div className="border border-[#111111] bg-white p-3 min-w-[140px]">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373]">
+                  AI vs Current
+                </div>
+                <div
+                  className={`mt-1 font-mono text-xl font-bold ${
+                    prodDelta >= 0 ? "text-[#1b6a38]" : "text-[#a65800]"
+                  }`}
+                >
                   {prodDelta >= 0 ? "+" : ""}
                   {prodDelta.toFixed(1)}%
-                </p>
+                </div>
+              </div>
+
+              <div className="border border-[#111111] bg-white p-3 min-w-[140px]">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373]">
+                  SOR Ratio
+                </div>
+                <div className="mt-1 font-mono text-xl font-bold text-[#111111]">
+                  {state.sor.toFixed(2)}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="plate diagonal-cut p-6">
-            <p className="eyebrow text-[var(--accent)]">Instrument board</p>
-            <div className="mt-4 flex flex-wrap justify-around gap-2">
+          {/* Instrument Board with Gauges (5 cols) */}
+          <div className="lg:col-span-5 border border-[#111111] bg-[#F5F5F5] p-5 hard-shadow">
+            <div className="border-b border-[#111111] pb-2 flex items-center justify-between">
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
+                INSTRUMENT TELEMETRY CONSOLE
+              </span>
+              <span className="font-mono text-[9px] text-[#737373]">REAL-TIME</span>
+            </div>
+
+            <div className="mt-5 grid grid-cols-3 gap-3">
               <Gauge
                 value={state.reservoir_temperature}
                 max={80}
-                label="Temp"
+                label="Thermal Core"
                 unit="°C"
                 tone="info"
-                size={100}
+                size={95}
               />
               <Gauge
                 value={Math.min(state.oil_viscosity, 1200)}
                 max={1200}
                 label="Viscosity"
                 unit="cP"
-                tone="accent"
-                size={100}
+                tone="warn"
+                size={95}
               />
               <Gauge
                 value={state.failure_probability * 100}
                 max={100}
-                label="Fail risk"
+                label="Hazard Risk"
                 unit="%"
                 tone={state.failure_probability > 0.3 ? "bad" : "good"}
-                size={100}
+                size={95}
               />
             </div>
-            <div className="mt-2 grid grid-cols-2 gap-4 border-t border-[var(--line)] pt-4">
-              <MiniSpark label="Temp trail" values={tempSeries} color="var(--info)" />
-              <MiniSpark label="Risk trail" values={failSeries} color="var(--bad)" />
+
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#111111] pt-3">
+              <div className="border border-[#111111] bg-white p-2">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373] mb-1">
+                  Temp History
+                </div>
+                <Sparkline values={tempSeries} color="#111111" width={110} height={24} />
+              </div>
+              <div className="border border-[#111111] bg-white p-2">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373] mb-1">
+                  Hazard History
+                </div>
+                <Sparkline values={failSeries} color="#CC0000" width={110} height={24} />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Telemetry rail — continuous, not cards */}
-      <section className="relative">
-        <div className="absolute left-0 top-0 h-full w-px bg-[var(--accent)] opacity-40" />
-        <div className="flex flex-wrap gap-x-12 gap-y-7 border-y border-[var(--line)] py-7 pl-5">
-          <Vital label="SOR" value={state.sor} decimals={2} />
-          <Vital label="Energy / bbl" value={state.energy_per_barrel} decimals={2} />
-          <Vital label="Pump η" value={state.pump_efficiency * 100} unit="%" decimals={1} />
-          <Vital label="Rod load" value={state.rod_load} unit="kN" decimals={1} />
-          <Vital label="SPM" value={state.spm} decimals={1} />
-          <Vital label="Stroke" value={state.stroke_length} unit="m" decimals={2} />
-          <Vital label="Steam" value={state.steam_volume} unit="t" decimals={0} />
-          <Vital label="VFD" value={state.vfd_setting} unit="%" decimals={0} />
+      {/* Telemetry Rail — Newspaper Columns with Collapsed Borders */}
+      <section className="border border-[#111111] bg-white">
+        <div className="border-b border-[#111111] bg-[#111111] text-[#F9F9F7] px-4 py-2 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest">
+          <span>FIELD TELEMETRY LEDGER</span>
+          <span>CALIBRATED TO OIL SPECIFICATIONS</span>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 divide-x divide-y sm:divide-y-0 divide-[#111111]">
+          <VitalBox label="SOR" value={state.sor} decimals={2} />
+          <VitalBox label="Energy/Bbl" value={state.energy_per_barrel} unit="kWh" decimals={2} />
+          <VitalBox label="Pump η" value={state.pump_efficiency * 100} unit="%" decimals={1} />
+          <VitalBox label="Rod Load" value={state.rod_load} unit="kN" decimals={1} />
+          <VitalBox label="Cadence" value={state.spm} unit="SPM" decimals={1} />
+          <VitalBox label="Stroke" value={state.stroke_length} unit="m" decimals={2} />
+          <VitalBox label="Steam Vol." value={state.steam_volume} unit="t" decimals={0} />
+          <VitalBox label="VFD Freq." value={state.vfd_setting} unit="%" decimals={0} />
         </div>
       </section>
 
+      {/* Active Alerts Notice */}
       {data.alerts?.alert_count > 0 && (
-        <p className="text-sm">
-          <span className="text-[var(--bad)]">{data.alerts.alert_count} active alerts</span>
-          <span className="text-[var(--ink-faint)]"> — open Alerts for severity detail</span>
-        </p>
+        <div className="border-2 border-[#CC0000] bg-[#FFF5F5] p-4 flex items-center justify-between font-mono text-xs text-[#CC0000]">
+          <div className="flex items-center space-x-2">
+            <span className="bg-[#CC0000] text-white px-2 py-0.5 font-bold uppercase text-[10px]">
+              ACTION REQUIRED
+            </span>
+            <span className="font-bold">
+              {data.alerts.alert_count} active anomaly condition(s) detected on {wellId}.
+            </span>
+          </div>
+          <span className="text-[#111111] underline font-semibold">
+            Review § 05 Risk & Alerts board
+          </span>
+        </div>
       )}
 
-      <p className="mono text-[10px] tracking-wide text-[var(--ink-faint)]">{data.demo_disclaimer}</p>
-
+      {/* Field History Chronology */}
       <section>
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="eyebrow text-[var(--accent)]">Chronology</p>
-            <h3 className="serif mt-1 text-3xl font-semibold text-[var(--ink)]">Field history</h3>
+        <div className="border-b-2 border-[#111111] pb-2 mb-6">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            HISTORICAL CHRONOLOGY
+          </span>
+          <h3 className="font-serif text-3xl font-black text-[#111111] uppercase">
+            Reservoir & Production Performance Records
+          </h3>
+        </div>
+        <TrendCharts history={data.history} />
+      </section>
+
+      {/* Forecast Bridge */}
+      <section className="border border-[#111111] bg-white p-6 md:p-8">
+        <div className="grid gap-8 lg:grid-cols-2 items-start">
+          <div className="space-y-3 lg:border-r border-[#111111] lg:pr-8">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+              BASELINE PROJECTION
+            </span>
+            <h4 className="font-serif text-2xl font-bold text-[#111111]">
+              Un-optimized Extrapolation
+            </h4>
+            <div className="flex items-baseline font-mono">
+              <span className="font-serif text-5xl font-bold text-[#111111]">
+                <AnimatedNumber value={pred.predicted_oil_rate_bopd} decimals={1} />
+              </span>
+              <span className="ml-2 text-sm text-[#737373]">BOPD</span>
+            </div>
+            <p className="font-body text-xs text-[#525252] leading-relaxed">
+              If operating levers remain unaltered: temperature projects to{" "}
+              <span className="font-mono font-bold text-[#111111]">{pred.predicted_reservoir_temperature}°C</span>,
+              viscosity at <span className="font-mono font-bold text-[#111111]">{pred.predicted_oil_viscosity.toFixed(0)} cP</span>,
+              and steam efficiency at <span className="font-mono font-bold text-[#111111]">{pred.predicted_sor} SOR</span>.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#1b6a38]">
+              OPTIMAL PREDICTED SETPOINTS
+            </span>
+            <h4 className="font-serif text-2xl font-bold text-[#111111]">
+              Under Synchronous AI Governance
+            </h4>
+            <p className="font-body text-xs text-[#525252] leading-relaxed">
+              With Steam at <span className="font-mono font-bold text-[#111111]">{data.optimization.recommended.parameters.steam_volume} t</span>,
+              cadence at <span className="font-mono font-bold text-[#111111]">{data.optimization.recommended.parameters.spm} SPM</span>,
+              and stroke at <span className="font-mono font-bold text-[#111111]">{data.optimization.recommended.parameters.stroke_length} m</span>:
+            </p>
+            <div className="border border-[#111111] bg-[#F9F9F7] p-4 font-mono text-xs space-y-1">
+              <div className="flex justify-between">
+                <span>Net Offtake Shift:</span>
+                <span className={prodDelta >= 0 ? "font-bold text-[#1b6a38]" : "font-bold text-[#a65800]"}>
+                  {prodDelta >= 0 ? "+" : ""}{prodDelta.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>SOR Consumption Change:</span>
+                <span className="font-bold text-[#111111]">
+                  {cmp.sor_change_pct >= 0 ? "+" : ""}{cmp.sor_change_pct.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span>Failure Risk Reduction:</span>
+                <span className="font-bold text-[#1b6a38]">
+                  {cmp.failure_risk_change_pct.toFixed(1)}%
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="mt-8 plate p-5 md:p-7">
-          <TrendCharts history={data.history} />
-        </div>
       </section>
 
-      {/* Forecast bridge — typographic, not boxes */}
-      <section className="grid gap-10 border-t border-[var(--line)] pt-12 lg:grid-cols-2">
-        <div>
-          <p className="eyebrow text-[var(--accent)]">Model forecast</p>
-          <p className="serif mt-3 text-5xl font-semibold leading-none text-[var(--ink)]">
-            <AnimatedNumber value={pred.predicted_oil_rate_bopd} decimals={1} />
-            <span className="ml-2 font-sans text-base font-normal text-[var(--ink-faint)]">BOPD</span>
-          </p>
-          <p className="mt-4 text-sm leading-relaxed text-[var(--ink-muted)]">
-            At current settings: temp{" "}
-            <span className="mono text-[var(--ink)]">{pred.predicted_reservoir_temperature}°C</span>
-            , viscosity{" "}
-            <span className="mono text-[var(--ink)]">{pred.predicted_oil_viscosity.toFixed(0)} cP</span>
-            , SOR <span className="mono text-[var(--ink)]">{pred.predicted_sor}</span>.
-          </p>
-        </div>
-        <div className="plate-inset p-6">
-          <p className="eyebrow text-[var(--accent)]">If AI setpoints applied</p>
-          <p className="mt-3 text-sm leading-relaxed text-[var(--ink-muted)]">
-            Steam{" "}
-            <span className="mono text-[var(--ink)]">{data.optimization.recommended.parameters.steam_volume} t</span>
-            {" · "}
-            SPM <span className="mono text-[var(--ink)]">{data.optimization.recommended.parameters.spm}</span>
-            {" · "}
-            stroke{" "}
-            <span className="mono text-[var(--ink)]">
-              {data.optimization.recommended.parameters.stroke_length} m
-            </span>
-            . Production{" "}
-            <span className={prodDelta >= 0 ? "text-[var(--good)]" : "text-[var(--warn)]"}>
-              {prodDelta >= 0 ? "+" : ""}
-              {prodDelta.toFixed(1)}%
-            </span>
-            , SOR{" "}
-            <span className="mono">
-              {cmp.sor_change_pct >= 0 ? "+" : ""}
-              {cmp.sor_change_pct.toFixed(1)}%
-            </span>
-            .
-          </p>
-          <ul className="mt-5 space-y-3">
-            {data.optimization.explanation.slice(0, 3).map((line) => (
-              <li key={line} className="flex gap-3 text-sm text-[var(--ink-muted)]">
-                <span className="mt-2 h-px w-4 shrink-0 bg-[var(--accent)]" />
-                {line}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
+      {/* Sub-panels */}
       <ParetoPanel recommended={data.optimization.recommended} options={pareto} />
       <BenefitSummary optimization={data.optimization} comparison={data.comparison} />
       <RecommendationPanel
@@ -213,16 +278,7 @@ export function OverviewPage({ data, wellId }: Props) {
   );
 }
 
-function MiniSpark({ label, values, color }: { label: string; values: number[]; color: string }) {
-  return (
-    <div>
-      <p className="eyebrow mb-1">{label}</p>
-      <Sparkline values={values} color={color} width={100} height={28} />
-    </div>
-  );
-}
-
-function Vital({
+function VitalBox({
   label,
   value,
   unit,
@@ -234,11 +290,11 @@ function Vital({
   decimals?: number;
 }) {
   return (
-    <div>
-      <div className="eyebrow">{label}</div>
-      <div className="mono mt-1.5 text-xl text-[var(--ink)]">
+    <div className="p-4 font-mono text-center">
+      <div className="text-[9px] uppercase tracking-wider text-[#737373] font-bold">{label}</div>
+      <div className="mt-1 text-lg font-bold text-[#111111]">
         <AnimatedNumber value={value} decimals={decimals} />
-        {unit && <span className="ml-1 text-[10px] text-[var(--ink-faint)]">{unit}</span>}
+        {unit && <span className="ml-0.5 text-[10px] text-[#737373]"> {unit}</span>}
       </div>
     </div>
   );

@@ -39,23 +39,35 @@ export function LiveStreamBar({ wellId, enabled = true }: Props) {
   if (!tick) return null;
 
   return (
-    <div className="plate fade-in overflow-hidden">
+    <div className="border border-[#111111] bg-[#FFFFFF] hard-shadow overflow-hidden">
       <div className="flex flex-wrap items-stretch">
-        <div className="flex items-center gap-3 border-r border-[var(--line)] bg-[rgba(212,160,90,0.06)] px-5 py-3">
+        {/* Live Status Pill */}
+        <div className="flex items-center gap-3 border-r border-[#111111] bg-[#111111] text-[#F9F9F7] px-4 py-2.5">
           <span className="pulse-dot" />
           <div>
-            <p className="eyebrow text-[var(--accent)]">Live stream</p>
-            <p className="mono text-[10px] text-[var(--ink-faint)]">tick #{tickCount}</p>
+            <div className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#CC0000]">
+              LIVE TELEMETRY
+            </div>
+            <div className="font-mono text-[10px] text-[#A3A3A3]">
+              TICK #{tickCount} · {wellId}
+            </div>
           </div>
         </div>
-        <div className="flex flex-1 flex-wrap items-center gap-x-8 gap-y-2 px-5 py-3">
-          <Live label="Oil" value={tick.oil_rate_bopd} unit="BOPD" />
-          <Live label="Temp" value={tick.reservoir_temperature} unit="°C" />
-          <Live label="Visc" value={tick.oil_viscosity} unit="cP" decimals={0} />
+
+        {/* Telemetry Stream Items */}
+        <div className="flex flex-1 flex-wrap items-center justify-around gap-x-6 gap-y-2 px-4 py-2">
+          <Live label="OIL RATE" value={tick.oil_rate_bopd} unit="BOPD" />
+          <Live label="TEMPERATURE" value={tick.reservoir_temperature} unit="°C" />
+          <Live label="VISCOSITY" value={tick.oil_viscosity} unit="cP" decimals={0} />
           <Live label="SOR" value={tick.sor} decimals={2} />
           <Live label="SPM" value={tick.spm} />
-          <Live label="Load" value={tick.rod_load} unit="kN" />
-          <Live label="Fail" value={tick.failure_probability * 100} unit="%" />
+          <Live label="ROD LOAD" value={tick.rod_load} unit="kN" />
+          <Live
+            label="FAILURE RISK"
+            value={tick.failure_probability * 100}
+            unit="%"
+            isAlert={tick.failure_probability > 0.25}
+          />
         </div>
       </div>
     </div>
@@ -67,18 +79,20 @@ function Live({
   value,
   unit,
   decimals = 1,
+  isAlert = false,
 }: {
   label: string;
   value: number;
   unit?: string;
   decimals?: number;
+  isAlert?: boolean;
 }) {
   return (
-    <div className="flex items-baseline gap-2">
-      <span className="eyebrow">{label}</span>
-      <span className="mono text-[15px] text-[var(--ink)]">
-        <AnimatedNumber value={value} decimals={decimals} duration={600} />
-        {unit && <span className="ml-0.5 text-[10px] text-[var(--ink-faint)]">{unit}</span>}
+    <div className="flex items-baseline gap-2 font-mono">
+      <span className="text-[10px] uppercase font-bold text-[#737373]">{label}:</span>
+      <span className={`text-sm font-bold ${isAlert ? "text-[#CC0000]" : "text-[#111111]"}`}>
+        <AnimatedNumber value={value} decimals={decimals} duration={400} />
+        {unit && <span className="ml-0.5 text-[10px] text-[#737373]"> {unit}</span>}
       </span>
     </div>
   );

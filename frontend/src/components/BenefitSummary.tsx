@@ -10,25 +10,36 @@ export function BenefitSummary({ optimization, comparison }: Props) {
   const rec = optimization.recommended;
 
   return (
-    <section className="fade-in relative overflow-hidden plate p-8 md:p-10">
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 opacity-[0.06]">
-        <svg viewBox="0 0 100 100" className="h-full w-full" preserveAspectRatio="xMaxYMid slice">
-          <path d="M20 100 L80 0 L100 0 L100 100 Z" fill="currentColor" />
-        </svg>
-      </div>
-      <p className="eyebrow text-[var(--accent)]">Closing the loop</p>
-      <h3 className="serif mt-2 text-4xl font-semibold text-[var(--ink)]">Expected benefit</h3>
-      <p className="mt-3 max-w-2xl text-sm text-[var(--ink-muted)]">{comparison.summary}</p>
-
-      <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        <Delta label="Production" value={comparison.production_change_pct} goodWhenPositive />
-        <Delta label="SOR" value={comparison.sor_change_pct} goodWhenPositive={false} />
-        <Delta label="Failure risk" value={comparison.failure_risk_change_pct} goodWhenPositive={false} />
+    <section className="border-4 border-[#111111] bg-[#F9F9F7] p-6 md:p-8 relative">
+      <div className="flex flex-wrap items-baseline justify-between gap-4 border-b-2 border-[#111111] pb-3">
         <div>
-          <div className="eyebrow">Recommended rate</div>
-          <div className="mono mt-2 text-4xl text-[var(--ink)]">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            ECONOMIC & OPERATIONAL AUDIT
+          </span>
+          <h3 className="mt-1 font-serif text-3xl font-black text-[#111111] uppercase">
+            Quantified Field Benefit
+          </h3>
+        </div>
+        <p className="font-body text-xs text-[#525252] max-w-md">
+          {comparison.summary}
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <DeltaBox label="Net Production Uplift" value={comparison.production_change_pct} goodWhenPositive />
+        <DeltaBox label="SOR Steam Reduction" value={comparison.sor_change_pct} goodWhenPositive={false} />
+        <DeltaBox label="Equipment Risk Reduction" value={comparison.failure_risk_change_pct} goodWhenPositive={false} />
+        
+        <div className="border border-[#111111] bg-white p-4">
+          <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#737373]">
+            Target Production Point
+          </div>
+          <div className="mt-2 font-mono text-3xl font-bold text-[#111111]">
             <AnimatedNumber value={rec.predicted_oil_rate_bopd} decimals={1} />
-            <span className="ml-2 text-sm text-[var(--ink-faint)]">BOPD</span>
+            <span className="ml-1 text-xs font-normal text-[#737373]">BOPD</span>
+          </div>
+          <div className="mt-2 font-mono text-[10px] text-[#1b6a38] font-semibold">
+            MAXIMUM DISPATCHABLE CAPACITY
           </div>
         </div>
       </div>
@@ -36,7 +47,7 @@ export function BenefitSummary({ optimization, comparison }: Props) {
   );
 }
 
-function Delta({
+function DeltaBox({
   label,
   value,
   goodWhenPositive,
@@ -47,13 +58,15 @@ function Delta({
 }) {
   const good = goodWhenPositive ? value > 0 : value < 0;
   return (
-    <div>
-      <div className="eyebrow">{label}</div>
-      <div className={`mono mt-2 text-4xl ${good ? "text-[var(--good)]" : "text-[var(--warn)]"}`}>
+    <div className="border border-[#111111] bg-white p-4">
+      <div className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#737373]">
+        {label}
+      </div>
+      <div className={`mt-2 font-mono text-3xl font-bold ${good ? "text-[#1b6a38]" : "text-[#CC0000]"}`}>
         {value >= 0 ? "+" : ""}
         <AnimatedNumber value={value} decimals={1} />%
       </div>
-      <div className="mt-3 h-0.5 w-16" style={{ background: good ? "var(--good)" : "var(--warn)" }} />
+      <div className={`mt-3 h-1 w-12 ${good ? "bg-[#1b6a38]" : "bg-[#CC0000]"}`} />
     </div>
   );
 }
