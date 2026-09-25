@@ -1,34 +1,80 @@
-# ORIGIN — Well-to-Surface AI Digital Twin
+# STRATA — Subsurface Thermal Intelligence & Wellhead Operational Record
 
-**SIH26120 · Oil India Limited · Team ORIGIN**
+**SIH26120 · Oil India Limited · Team STRATA**
 
-AI-enabled decision-support prototype for integrated Cyclic Steam Stimulation (CSS) and Sucker Rod Pump (SRP) optimization at Baghewala Field.
+AI-enabled decision-support prototype and physics-informed digital twin for integrated **Cyclic Steam Stimulation (CSS)** and **Sucker Rod Pump (SRP)** optimization in extra-heavy crude reservoirs at **Baghewala Field, Rajasthan**.
 
-> **Disclaimer:** This prototype uses **synthetic demo data** and configurable assumptions. Predictions and recommendations are **not** guaranteed field outcomes or official OIL operating limits.
+> **Disclaimer:** This prototype uses **synthetic demo data** and configurable physical assumptions. Predictions and recommendations are decision-support outputs and do **not** replace certified Oil India Limited (OIL) field operating limits.
 
-## Architecture
+---
 
+## 🗞️ The Newsprint Design System
+
+STRATA features a completely bespoke **Newsprint** design system inspired by the golden age of print journalism and broadsheet publications of record:
+
+* **Stark Broadsheet Geometry:** Zero border radius (`0px`) strictly enforced across all cards, dialogs, meters, and buttons.
+* **High-Contrast Editorial Typography:** Viewport-dominating headlines in **Playfair Display**, long-form engineering prose in **Lora**, telemetry and coordinate readouts in **JetBrains Mono**, and clean UI controls in **Inter**.
+* **Authentic Broadsheet Architecture:** 
+  * **Left-Column Newspaper Sidebar (`Sidebar.tsx`):** Complete section index (`§ 00` to `§ 07`), active borehole selector (`BGW-01`, `BGW-02`, etc.), active alert badges, and collapsible mobile drawer.
+  * **Top Editorial Masthead (`NewsprintHeader.tsx`):** Folio line with daily publication date, desert basin weather conditions, and quick-action toolbar.
+  * **Mechanical Telemetry Marquee (`NewsprintMarquee.tsx`):** Continuous real-time stock-ticker crawl of live oil offtake, reservoir thermal core, SOR, rod load, and Brent crude index.
+  * **Hard Offset Shadows:** Mechanical hover lift (`box-shadow: 4px 4px 0px 0px #111111` with `translate(-2px, -2px)`).
+  * **Tactile Paper Texture:** Layered off-white paper (`#F9F9F7`) with fine 4×4px dot-grid overlay and deep ink black (`#111111`) collapsed grid borders.
+
+---
+
+## 🏛️ System Architecture
+
+```text
+Field CSV / Telemetry → SQLite → Preprocessing → Physics Surrogate (XGBoost/ML) → Multi-Objective Optimizer → FastAPI → STRATA Newsprint Broadsheet
 ```
-Demo CSV → SQLite → Preprocessing → ML Prediction → Constrained Optimizer → FastAPI → React Dashboard
+
+1. **Thermodynamic Heating (CSS):** Models subterranean steam enthalpy diffusion and viscosity reduction across soaking and production days.
+2. **Mechanical Artificial Lift (SRP):** Simulates surface walking beam kinematics, polish rod stresses, and downhole pump efficiency.
+3. **Closed-Loop Optimization:** Multi-objective Pareto optimization balancing crude offtake (BOPD), steam-oil ratio (SOR), electrical consumption, and rod-floating / pump-unseating hazards.
+
+---
+
+## 📑 Operating Sections
+
+| Section | Module | Capabilities |
+| :--- | :--- | :--- |
+| **`§ 00`** | **Front Page Dispatch** | Broadsheet lead story with drop cap narrative, patent wire diagram (Fig 1.0), and an interactive **"Test the Levers"** front-page simulation sampler. |
+| **`§ 01`** | **Field Overview** | 12-column collapsed broadsheet telemetry rail, live sensor ticker, instrument console with circular gauges, 90-day history trend charts, and AI recommendation bridge. |
+| **`§ 02`** | **Field Laboratory** | Connected physics twin, dynagraph card plots (surface vs downhole), transient horizon replay, causal diagnostic chains, and safety gates. |
+| **`§ 03`** | **What-If Simulator** | Parametric scenario ledger with custom range sliders, preset injection schedules, and 10-day post-steam soak production curve. |
+| **`§ 04`** | **3D Digital Twin** | Archival exhibition frame featuring interactive 3D WebGL pumpjack kinematics and subsurface thermal plume paired with a 2D patent wellbore schematic. |
+| **`§ 05`** | **Risk & Alerts** | Telegram-style incident log with severity stamps (`[CRITICAL - SEV III]`, `[WARNING - SEV II]`), root cause, evidence, and remedial instructions. |
+| **`§ 06`** | **Model Registry** | Cross-validation benchmark tables comparing candidate regressors and classifiers with vertical SHAP global feature weight charts. |
+| **`§ 07`** | **Data Ingestion** | Archival intake ledger for uploading operational CSV logs with automatic validation and surrogate retraining. |
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Recharts, Three.js, React Three Fiber, Lucide Icons |
+| **Backend** | Python 3.12, FastAPI, Pydantic, SQLAlchemy, Uvicorn |
+| **Machine Learning** | scikit-learn, XGBoost, SHAP Attribution Engine |
+| **Physics Engines** | Boberg-Lantz thermal dissipation model, Gibbs dynagraph analysis, Nelder-Mead / Pareto optimizer |
+| **Database** | SQLite (PostgreSQL-ready architecture) |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Automated Launch (Windows)
+Runs both the FastAPI backend (port 8000) and Vite frontend (port 5173) in separate windows:
+```powershell
+.\scripts\start.ps1
 ```
 
-- **Prediction** (ML): What happens if we use these parameters?
-- **Optimization** (search + scoring): What parameters should we choose?
-- **Comparison**: Current vs AI-recommended operating points
+---
 
-## Tech Stack
+### 2. Manual Setup
 
-| Layer | Stack |
-|-------|-------|
-| Frontend | React, TypeScript, Vite, Tailwind, Recharts |
-| Backend | Python, FastAPI, Pydantic, SQLAlchemy |
-| ML | scikit-learn, XGBoost |
-| Database | SQLite (PostgreSQL-ready design) |
-
-## Quick Start
-
-### Backend
-
+#### Backend
 ```bash
 cd backend
 python -m venv .venv
@@ -36,94 +82,64 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000 --app-dir .
 ```
+* **API Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
-API: http://127.0.0.1:8000  
-Docs: http://127.0.0.1:8000/docs
-
-> **WinError 10013 / port busy:** Usually another Python/uvicorn is already using that port. Check and free it:
-> ```powershell
-> netstat -ano | findstr :8000
-> Stop-Process -Id <PID> -Force
-> ```
-> Or use another free port, e.g. `--port 8088`, and set the same port in `frontend/vite.config.ts` proxy target.
-
-### Frontend
-
+#### Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+* **Web UI:** [http://localhost:5173](http://localhost:5173)
 
-UI: http://localhost:5173
+---
 
-### Tests
+## 🧪 Tests
 
+Execute backend constraint tests and API endpoint verifications:
 ```bash
 cd backend
 pytest ../tests -q
 ```
 
-## Project Structure
-
-```
-backend/app/     FastAPI, ML, optimization, data pipeline
-frontend/src/    React dashboard
-data/demo/       Synthetic Baghewala CSV (auto-generated)
-models/          Trained model artifacts
-tests/           API and constraint tests
+Validate frontend TypeScript compilation and production bundle:
+```bash
+cd frontend
+npm run build
 ```
 
-## Milestone 1
+---
 
-- [x] FastAPI backend + SQLite
-- [x] Synthetic Baghewala demo dataset
-- [x] Production + failure-risk ML models with comparison
-- [x] CSS/SRP constrained optimizer
-- [x] Dashboard: current state, prediction, recommendation, comparison
+## 📁 Repository Structure
 
-## Milestone 2
-
-- [x] What-if simulation + CSS cycle timeline
-- [x] Alert system (INFO / WARNING / CRITICAL)
-- [x] 3D Digital Twin (React Three Fiber) synced to backend
-- [x] Model performance + feature importance explainability
-- [x] Multi-page UI: Overview, What-If, 3D Twin, Alerts, Models
-
-## Milestone 3
-
-- [x] Pareto-efficient alternatives (production / SOR / reliability trade-offs)
-- [x] Live demo sensor stream (REST polling + WebSocket)
-- [x] CSV import UI with model retraining
-
-## Milestone 4 (Current)
-
-- [x] SHAP / local prediction explainability per well
-- [x] Benefit summary panel for judge demo finale
-- [x] Optimization result caching (faster repeat loads)
-- [x] One-command launch script (`scripts/start.ps1`)
-
-## Quick Start (Windows)
-
-```powershell
-.\scripts\start.ps1
+```text
+├── backend/
+│   ├── app/
+│   │   ├── api/          # FastAPI REST & WebSocket routes
+│   │   ├── data/         # SQLite database & synthetic dataset generator
+│   │   ├── engines/      # Decision intelligence & causal diagnostic engines
+│   │   ├── ml/           # XGBoost surrogate trainers & SHAP explainability
+│   │   ├── optimization/ # Constrained Nelder-Mead & Pareto frontier search
+│   │   └── physics/      # Thermal CSS & SRP mechanical lift kinematics
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # Broadsheet components (Sidebar, Masthead, Marquee, Gauges)
+│   │   ├── pages/        # Sections § 00 to § 07 (Landing, Overview, Lab, What-If, etc.)
+│   │   ├── services/     # Typed API clients
+│   │   ├── three/        # WebGL 3D Digital Twin scene (React Three Fiber)
+│   │   └── types/        # TypeScript domain models & interfaces
+│   ├── index.html
+│   ├── tailwind.config.js
+│   └── package.json
+├── data/demo/            # Baghewala baseline CSV dataset
+├── models/               # Serialized surrogate model weights (.joblib)
+├── scripts/              # Launch and initialization scripts
+└── tests/                # Automated pytest suite
 ```
 
-Opens backend (port 8000) and frontend (port 5173) in separate terminals.
+---
 
-## Next Phases
+## 👥 Acknowledgements
 
-- NSGA-II with pymoo for larger search spaces
-- Production deployment (PostgreSQL, auth)
-
-## Demo Flow
-
-1. Select a Baghewala well (BGW-001)
-2. Click **AI Analyze**
-3. **Overview** — KPIs, trends, AI recommendation vs current
-4. **What-If** — change steam/SPM, click Simulate, view timeline
-5. **3D Twin** — switch Current / Predicted / Optimized states
-6. **Alerts** — review model-driven risk warnings
-7. **Models** — inspect validation metrics and feature importances
-8. **Data** — import CSV when real OIL data becomes available
-9. **Overview live stream** — watch synthetic sensor ticks update every 3s
+Developed for **Smart India Hackathon 2026 (SIH-26120)** in partnership with **Oil India Limited (OIL)**.
