@@ -26,9 +26,9 @@ export function NewsprintHeader({
   const isFrontPage = page === "landing";
 
   return (
-    <header className="border-b border-[#111111] bg-[#F9F9F7] text-[#111111]">
+    <header className="border-b border-[#111111] bg-[#F2ECE1] text-[#111111]">
       {/* Topmost Newspaper Folio / Micro-strip */}
-      <div className="flex flex-wrap items-center justify-between border-b border-[#111111] px-6 py-1.5 font-mono text-[10px] tracking-wider text-[#525252]">
+      <div className="flex flex-wrap items-center justify-between border-b border-[#111111] px-6 py-1.5 font-mono text-[10px] tracking-wider text-[#4D483F]">
         <div className="flex items-center space-x-3">
           <span className="font-bold text-[#111111]">THE BAGHEWALA DISPATCH</span>
           <span>·</span>
@@ -39,7 +39,7 @@ export function NewsprintHeader({
         <div className="flex items-center space-x-3">
           <span className="hidden md:inline">WEATHER: 36°C DESERT SUN · 12% HUMIDITY</span>
           <span>·</span>
-          <span className="font-bold text-[#CC0000]">OIL INDIA LIMITED</span>
+          <span className="font-bold text-[#C41212]">OIL INDIA LIMITED</span>
         </div>
       </div>
 
@@ -47,7 +47,7 @@ export function NewsprintHeader({
       <div className="px-6 py-6 text-center">
         <div className="flex items-center justify-center space-x-4 mb-2">
           <div className="h-[1px] w-12 sm:w-28 bg-[#111111]" />
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#737373]">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-[#6B655A]">
             AUTONOMOUS HEAVY OIL INTELLIGENCE
           </span>
           <div className="h-[1px] w-12 sm:w-28 bg-[#111111]" />
@@ -57,7 +57,7 @@ export function NewsprintHeader({
           STRATA DISPATCH
         </h1>
 
-        <p className="mx-auto mt-2 max-w-3xl font-serif text-xs sm:text-sm italic text-[#525252]">
+        <p className="mx-auto mt-2 max-w-3xl font-serif text-xs sm:text-sm italic text-[#4D483F]">
           "The deep sandstone intelligence and closed-loop operational record for integrated Cyclic Steam Stimulation & Sucker Rod Pumping at Baghewala Field."
         </p>
 
@@ -69,8 +69,8 @@ export function NewsprintHeader({
               onClick={() => onPageChange("landing")}
               className={`border px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all ${
                 isFrontPage
-                  ? "border-[#111111] bg-[#111111] text-[#F9F9F7]"
-                  : "border-[#111111] bg-transparent text-[#111111] hover:bg-[#E5E5E0]"
+                  ? "border-[#111111] bg-[#111111] text-[#FAF7EE]"
+                  : "border-[#111111] bg-transparent text-[#111111] hover:bg-[#EAE2D2]"
               }`}
             >
               § 00 Front Page
@@ -80,8 +80,8 @@ export function NewsprintHeader({
               onClick={() => onPageChange("overview")}
               className={`border px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all ${
                 !isFrontPage
-                  ? "border-[#111111] bg-[#111111] text-[#F9F9F7]"
-                  : "border-[#111111] bg-transparent text-[#111111] hover:bg-[#E5E5E0]"
+                  ? "border-[#111111] bg-[#111111] text-[#FAF7EE]"
+                  : "border-[#111111] bg-transparent text-[#111111] hover:bg-[#EAE2D2]"
               }`}
             >
               Operations Terminal
@@ -89,7 +89,7 @@ export function NewsprintHeader({
           </div>
 
           <div className="flex items-center space-x-3">
-            <span className="font-mono text-xs text-[#525252]">
+            <span className="font-mono text-xs text-[#4D483F]">
               Target Borehole: <span className="font-bold text-[#111111]">{selectedWell}</span>
             </span>
             <button

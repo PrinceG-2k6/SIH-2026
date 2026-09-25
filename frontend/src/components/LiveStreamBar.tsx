@@ -39,16 +39,16 @@ export function LiveStreamBar({ wellId, enabled = true }: Props) {
   if (!tick) return null;
 
   return (
-    <div className="border border-[#111111] bg-[#FFFFFF] hard-shadow overflow-hidden">
+    <div className="border border-[#111111] bg-[#FAF7EE] hard-shadow overflow-hidden">
       <div className="flex flex-wrap items-stretch">
         {/* Live Status Pill */}
-        <div className="flex items-center gap-3 border-r border-[#111111] bg-[#111111] text-[#F9F9F7] px-4 py-2.5">
+        <div className="flex items-center gap-3 border-r border-[#111111] bg-[#111111] text-[#FAF7EE] px-4 py-2.5">
           <span className="pulse-dot" />
           <div>
-            <div className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#CC0000]">
+            <div className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#C41212]">
               LIVE TELEMETRY
             </div>
-            <div className="font-mono text-[10px] text-[#A3A3A3]">
+            <div className="font-mono text-[10px] text-[#8C867A]">
               TICK #{tickCount} · {wellId}
             </div>
           </div>
@@ -89,10 +89,10 @@ function Live({
 }) {
   return (
     <div className="flex items-baseline gap-2 font-mono">
-      <span className="text-[10px] uppercase font-bold text-[#737373]">{label}:</span>
-      <span className={`text-sm font-bold ${isAlert ? "text-[#CC0000]" : "text-[#111111]"}`}>
+      <span className="text-[10px] uppercase font-bold text-[#6B655A]">{label}:</span>
+      <span className={`text-sm font-bold ${isAlert ? "text-[#C41212]" : "text-[#111111]"}`}>
         <AnimatedNumber value={value} decimals={decimals} duration={400} />
-        {unit && <span className="ml-0.5 text-[10px] text-[#737373]"> {unit}</span>}
+        {unit && <span className="ml-0.5 text-[10px] text-[#6B655A]"> {unit}</span>}
       </span>
     </div>
   );

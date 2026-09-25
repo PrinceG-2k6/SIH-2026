@@ -17,7 +17,7 @@ interface TrendChartsProps {
 }
 
 const newsprintTipStyle = {
-  backgroundColor: "#FFFFFF",
+  backgroundColor: "#FAF7EE",
   border: "1px solid #111111",
   boxShadow: "3px 3px 0px #111111",
   borderRadius: 0,
@@ -37,10 +37,10 @@ export function TrendCharts({ history }: TrendChartsProps) {
   return (
     <div className="space-y-10">
       {/* Chart 1: Oil vs Temperature */}
-      <div className="border border-[#111111] bg-white p-5">
+      <div className="border border-[#111111] bg-[#FAF7EE] p-5">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[#111111] pb-3">
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
               CHRONOLOGY · PRODUCTION VS THERMAL CORE
             </span>
             <p className="mt-1 font-serif text-lg font-bold text-[#111111]">
@@ -61,16 +61,16 @@ export function TrendCharts({ history }: TrendChartsProps) {
                   <stop offset="100%" stopColor="#111111" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="#E5E5E0" strokeDasharray="2 2" vertical={false} />
+              <CartesianGrid stroke="#D8D0BF" strokeDasharray="2 2" vertical={false} />
               <XAxis
                 dataKey="date"
-                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
                 axisLine={{ stroke: "#111111" }}
                 tickLine={{ stroke: "#111111" }}
               />
               <YAxis
                 yAxisId="l"
-                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
                 axisLine={{ stroke: "#111111" }}
                 tickLine={{ stroke: "#111111" }}
                 width={38}
@@ -78,9 +78,9 @@ export function TrendCharts({ history }: TrendChartsProps) {
               <YAxis
                 yAxisId="r"
                 orientation="right"
-                tick={{ fill: "#CC0000", fontSize: 10, fontFamily: "JetBrains Mono" }}
-                axisLine={{ stroke: "#CC0000" }}
-                tickLine={{ stroke: "#CC0000" }}
+                tick={{ fill: "#C41212", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                axisLine={{ stroke: "#C41212" }}
+                tickLine={{ stroke: "#C41212" }}
                 width={36}
               />
               <Tooltip contentStyle={newsprintTipStyle} />
@@ -94,9 +94,9 @@ export function TrendCharts({ history }: TrendChartsProps) {
               <ReferenceLine
                 yAxisId="l"
                 y={avgProd}
-                stroke="#737373"
+                stroke="#6B655A"
                 strokeDasharray="4 4"
-                label={{ value: "AVG", fill: "#737373", fontSize: 10, position: "insideTopLeft" }}
+                label={{ value: "AVG", fill: "#6B655A", fontSize: 10, position: "insideTopLeft" }}
               />
               <Area
                 yAxisId="l"
@@ -113,7 +113,7 @@ export function TrendCharts({ history }: TrendChartsProps) {
                 type="monotone"
                 dataKey="reservoir_temperature"
                 name="Reservoir Temp (°C)"
-                stroke="#CC0000"
+                stroke="#C41212"
                 strokeWidth={2}
                 dot={false}
                 animationDuration={800}
@@ -124,10 +124,10 @@ export function TrendCharts({ history }: TrendChartsProps) {
       </div>
 
       {/* Chart 2: SOR vs Failure Risk */}
-      <div className="border border-[#111111] bg-white p-5">
+      <div className="border border-[#111111] bg-[#FAF7EE] p-5">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[#111111] pb-3">
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
               EQUIPMENT INTEGRITY & STEAM ECONOMY
             </span>
             <p className="mt-1 font-serif text-lg font-bold text-[#111111]">
@@ -141,19 +141,19 @@ export function TrendCharts({ history }: TrendChartsProps) {
             <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="failRedFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#CC0000" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#CC0000" stopOpacity={0.0} />
+                  <stop offset="0%" stopColor="#C41212" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="#C41212" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid stroke="#E5E5E0" strokeDasharray="2 2" vertical={false} />
+              <CartesianGrid stroke="#D8D0BF" strokeDasharray="2 2" vertical={false} />
               <XAxis
                 dataKey="date"
-                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
                 axisLine={{ stroke: "#111111" }}
                 tickLine={{ stroke: "#111111" }}
               />
               <YAxis
-                tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
                 axisLine={{ stroke: "#111111" }}
                 tickLine={{ stroke: "#111111" }}
                 width={38}
@@ -170,7 +170,7 @@ export function TrendCharts({ history }: TrendChartsProps) {
                 type="monotone"
                 dataKey="sor"
                 name="SOR (Steam/Oil)"
-                stroke="#525252"
+                stroke="#4D483F"
                 strokeWidth={2}
                 dot={false}
               />
@@ -178,7 +178,7 @@ export function TrendCharts({ history }: TrendChartsProps) {
                 type="monotone"
                 dataKey="failure_probability"
                 name="Failure Probability"
-                stroke="#CC0000"
+                stroke="#C41212"
                 fill="url(#failRedFill)"
                 strokeWidth={2}
               />

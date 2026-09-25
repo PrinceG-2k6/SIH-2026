@@ -58,7 +58,7 @@ export default function App() {
     >
       {/* Error Notice */}
       {error && (
-        <div className="mb-6 border-2 border-[#CC0000] bg-[#FFF5F5] p-4 font-mono text-xs text-[#CC0000]">
+        <div className="mb-6 border-2 border-[#C41212] bg-[#F7EBEB] p-4 font-mono text-xs text-[#C41212]">
           <span className="font-bold mr-2">[TELECOMMUNICATION INTERRUPTION]</span>
           {error}
         </div>
@@ -66,7 +66,7 @@ export default function App() {
 
       {/* Loading Notice */}
       {loading && !data && (
-        <div className="mb-6 border border-[#111111] bg-[#F5F5F5] p-4 font-mono text-xs text-[#525252]">
+        <div className="mb-6 border border-[#111111] bg-[#EAE2D2] p-4 font-mono text-xs text-[#4D483F]">
           COMPUTING SURROGATE PREDICTION & CONSTRAINED OPTIMIZATION FOR{" "}
           <span className="font-bold text-[#111111]">{selectedWell}</span>…
         </div>
@@ -91,7 +91,7 @@ export default function App() {
       {page === "data" && <DataPage />}
 
       {!loading && !data && !error && page !== "landing" && (
-        <div className="border border-[#111111] bg-[#F9F9F7] p-8 text-center font-mono text-xs text-[#737373]">
+        <div className="border border-[#111111] bg-[#FAF7EE] p-8 text-center font-mono text-xs text-[#6B655A]">
           WAITING FOR TELEMETRY STREAM FROM BOREHOLE SERVER…
         </div>
       )}

@@ -18,7 +18,7 @@ interface Props {
 }
 
 const tip = {
-  backgroundColor: "#FFFFFF",
+  backgroundColor: "#FAF7EE",
   border: "1px solid #111111",
   boxShadow: "3px 3px 0px #111111",
   borderRadius: 0,
@@ -187,13 +187,13 @@ export function TwinLabPage({ wellId }: Props) {
     <div className="fade-in space-y-10 pb-12">
       <div className="flex flex-wrap items-end justify-between gap-4 border-b-2 border-[#111111] pb-4">
         <div>
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
             CONNECTED PHYSICS TWIN · EXPERIMENTAL LAB
           </span>
           <h2 className="mt-1 font-serif text-4xl sm:text-5xl font-black text-[#111111] uppercase">
             Field Laboratory & Deep Twin
           </h2>
-          <p className="mt-2 font-body text-sm text-[#525252] max-w-2xl leading-relaxed">
+          <p className="mt-2 font-body text-sm text-[#4D483F] max-w-2xl leading-relaxed">
             {String(twin.name)} · {String(twin.location)} · {String(twin.formation)} · {String(twin.depth_m)} m depth.
             Physics-informed surrogate simulation engine with closed-loop parameter re-calibration.
           </p>

@@ -48,13 +48,13 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
       <div className="border-b-2 border-[#111111] pb-4">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-3xl">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
               SUB-SURFACE TO SURFACE REPLICA · BOREHOLE {wellId}
             </span>
             <h2 className="mt-1 font-serif text-4xl sm:text-5xl font-black text-[#111111] uppercase">
               3D Dynamic Digital Twin
             </h2>
-            <p className="mt-2 font-body text-sm text-[#525252] leading-relaxed">
+            <p className="mt-2 font-body text-sm text-[#4D483F] leading-relaxed">
               Real-time WebGL kinematic synthesis. Walking beam cadence follows SPM and stroke;
               downhole thermal chamber expansion scales with cumulative steam enthalpy;
               polish-rod stress gradients respond to fluid viscosity and rod floating hazards.
@@ -70,8 +70,8 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
                 onClick={() => setMode(m.id)}
                 className={`px-3 py-2 font-mono text-xs font-bold uppercase tracking-wider border transition-all ${
                   mode === m.id
-                    ? "border-[#111111] bg-[#111111] text-[#F9F9F7]"
-                    : "border-[#111111] bg-white text-[#111111] hover:bg-[#E5E5E0]"
+                    ? "border-[#111111] bg-[#111111] text-[#FAF7EE]"
+                    : "border-[#111111] bg-[#FAF7EE] text-[#111111] hover:bg-[#EAE2D2]"
                 }`}
               >
                 {m.label}
@@ -82,13 +82,13 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
       </div>
 
       {error && (
-        <div className="border border-[#CC0000] bg-[#FFF5F5] p-4 font-mono text-xs text-[#CC0000]">
+        <div className="border border-[#C41212] bg-[#F7EBEB] p-4 font-mono text-xs text-[#C41212]">
           TWIN CONNECTION ERROR: {error}
         </div>
       )}
 
       {loading && (
-        <div className="border border-[#111111] bg-[#F5F5F5] p-8 text-center font-mono text-xs text-[#525252]">
+        <div className="border border-[#111111] bg-[#EAE2D2] p-8 text-center font-mono text-xs text-[#4D483F]">
           SYNCHRONIZING DIGITAL TWIN KINEMATICS WITH SIMULATOR BACKEND…
         </div>
       )}
@@ -122,12 +122,12 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
           {/* Dual Exhibit: 2D Schematic + 3D WebGL Canvas */}
           <div className="grid gap-6 xl:grid-cols-[340px_1fr] items-start">
             {/* 2D Technical Patent Drawing */}
-            <div className="border-2 border-[#111111] bg-white hard-shadow">
-              <div className="border-b border-[#111111] bg-[#F5F5F5] px-4 py-2 flex items-center justify-between font-mono text-[10px] uppercase font-bold text-[#111111]">
+            <div className="border-2 border-[#111111] bg-[#FAF7EE] hard-shadow">
+              <div className="border-b border-[#111111] bg-[#EAE2D2] px-4 py-2 flex items-center justify-between font-mono text-[10px] uppercase font-bold text-[#111111]">
                 <span>FIG 1.1 — WELL SECTION</span>
                 <span>STRATIGRAPHY</span>
               </div>
-              <div className="h-[520px] p-2 bg-[#F9F9F7]">
+              <div className="h-[520px] p-2 bg-[#FAF7EE]">
                 <WellSchematic state={twin} />
               </div>
             </div>
@@ -153,10 +153,10 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
 
               {/* Instructions Bar */}
               <div className="flex flex-wrap justify-between gap-2 border-t border-white/20 bg-black/90 px-4 py-2 text-white font-mono text-[10px] uppercase tracking-wider">
-                <span className="text-[#A3A3A3]">
+                <span className="text-[#8C867A]">
                   NAVIGATION: LEFT-CLICK TO ORBIT · SCROLL TO ZOOM · RIGHT-CLICK TO PAN
                 </span>
-                <span className="text-[#CC0000] font-bold">
+                <span className="text-[#C41212] font-bold">
                   SURFACE-TO-SANDSTONE INTERFACE ACTIVE
                 </span>
               </div>
@@ -178,7 +178,7 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
 
           {/* Warning Banner */}
           {(twin.rod_floating_probability > 0.35 || twin.failure_probability > 0.3) && (
-            <div className="border-2 border-[#CC0000] bg-[#FFF5F5] p-4 font-mono text-xs text-[#CC0000]">
+            <div className="border-2 border-[#C41212] bg-[#F7EBEB] p-4 font-mono text-xs text-[#C41212]">
               <span className="font-bold uppercase mr-2">[MECHANICAL HAZARD DETECTED]</span>
               {twin.rod_floating_probability > 0.35 &&
                 "Elevated rod floating hazard. Subsurface oil viscosity prevents timely valve reseating on downstroke. Sucker rod chatter active in 3D scene."}
@@ -187,7 +187,7 @@ export function DigitalTwinPage({ wellId, dashboard }: Props) {
           )}
 
           {dashboard && mode === "optimized" && (
-            <div className="border border-[#111111] bg-[#F5F5F5] p-3 font-mono text-xs text-[#525252]">
+            <div className="border border-[#111111] bg-[#EAE2D2] p-3 font-mono text-xs text-[#4D483F]">
               OPTIMIZED EQUILIBRIUM: STEAM {dashboard.optimization.recommended.parameters.steam_volume} t · CADENCE{" "}
               {dashboard.optimization.recommended.parameters.spm} SPM · STROKE{" "}
               {dashboard.optimization.recommended.parameters.stroke_length} m
@@ -209,9 +209,9 @@ function MetricChip({
   isAlert?: boolean;
 }) {
   return (
-    <div className="border border-[#111111] bg-white p-4">
-      <div className="text-[9px] uppercase tracking-wider text-[#737373] font-bold">{label}</div>
-      <div className={`mt-1 text-xl font-bold ${isAlert ? "text-[#CC0000]" : "text-[#111111]"}`}>
+    <div className="border border-[#111111] bg-[#FAF7EE] p-4">
+      <div className="text-[9px] uppercase tracking-wider text-[#6B655A] font-bold">{label}</div>
+      <div className={`mt-1 text-xl font-bold ${isAlert ? "text-[#C41212]" : "text-[#111111]"}`}>
         {value}
       </div>
     </div>

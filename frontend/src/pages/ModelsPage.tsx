@@ -8,7 +8,7 @@ interface Props {
 }
 
 const newsprintTipStyle = {
-  backgroundColor: "#FFFFFF",
+  backgroundColor: "#FAF7EE",
   border: "1px solid #111111",
   boxShadow: "3px 3px 0px #111111",
   borderRadius: 0,
@@ -35,13 +35,13 @@ export function ModelsPage({ metrics }: Props) {
     <div className="fade-in space-y-10">
       {/* Title Banner */}
       <div className="border-b-2 border-[#111111] pb-4">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
           MACHINE LEARNING REGISTRY & VALIDATION ARCHIVE
         </span>
         <h2 className="mt-1 font-serif text-4xl sm:text-5xl font-black text-[#111111] uppercase">
           Surrogate Model Performance
         </h2>
-        <p className="mt-2 font-body text-sm text-[#525252] max-w-2xl leading-relaxed">
+        <p className="mt-2 font-body text-sm text-[#4D483F] max-w-2xl leading-relaxed">
           Algorithm evaluation benchmarked on Baghewala reservoir operational history.
           Selected models govern constrained simulation search loops and risk boundary assertions.
         </p>
@@ -78,7 +78,7 @@ export function ModelsPage({ metrics }: Props) {
         </div>
       )}
 
-      <p className="font-mono text-[10px] text-[#737373] border-t border-[#E5E5E0] pt-3 italic">
+      <p className="font-mono text-[10px] text-[#6B655A] border-t border-[#D8D0BF] pt-3 italic">
         {explain?.disclaimer ?? String(metrics.disclaimer ?? "")}
       </p>
     </div>
@@ -99,9 +99,9 @@ function ModelCard({
   if (!selected) return null;
 
   return (
-    <section className="border-2 border-[#111111] bg-white p-6 hard-shadow">
+    <section className="border-2 border-[#111111] bg-[#FAF7EE] p-6 hard-shadow">
       <div className="flex items-center justify-between border-b border-[#111111] pb-2">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
           {title}
         </span>
         <span className="bg-[#1b6a38] text-white px-2 py-0.5 font-mono text-[9px] font-bold uppercase">
@@ -113,13 +113,13 @@ function ModelCard({
         <h3 className="font-serif text-2xl font-black text-[#111111]">
           {String(selected.model_name)}
         </h3>
-        <p className="font-mono text-[10px] text-[#737373] uppercase mt-0.5">
+        <p className="font-mono text-[10px] text-[#6B655A] uppercase mt-0.5">
           VALIDATED SURROGATE ENGINE
         </p>
       </div>
 
       {/* Key Metrics Grid */}
-      <dl className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 border-y border-[#111111] py-4 bg-[#F9F9F7] font-mono">
+      <dl className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-3 border-y border-[#111111] py-4 bg-[#EAE2D2] font-mono">
         {!isClassification && (
           <>
             <Metric label="MAE" value={selected.mae} />
@@ -141,7 +141,7 @@ function ModelCard({
         <div className="mt-6 overflow-x-auto">
           <table className="w-full text-left font-mono text-xs border border-[#111111]">
             <thead>
-              <tr className="border-b border-[#111111] bg-[#111111] text-[#F9F9F7]">
+              <tr className="border-b border-[#111111] bg-[#111111] text-[#FAF7EE]">
                 <th className="px-3 py-2 font-bold uppercase">Candidate Model</th>
                 {!isClassification ? (
                   <>
@@ -157,28 +157,28 @@ function ModelCard({
                 <th className="px-3 py-2 font-bold uppercase">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E5E0]">
+            <tbody className="divide-y divide-[#D8D0BF]">
               {comparison.map((c, i) => {
                 const isSelected = c.model_name === selected.model_name;
                 return (
-                  <tr key={i} className={isSelected ? "bg-[#F5F5F5] font-bold" : "bg-white"}>
-                    <td className="px-3 py-2 border-r border-[#E5E5E0]">{String(c.model_name)}</td>
+                  <tr key={i} className={isSelected ? "bg-[#EAE2D2] font-bold" : "bg-[#FAF7EE]"}>
+                    <td className="px-3 py-2 border-r border-[#D8D0BF]">{String(c.model_name)}</td>
                     {!isClassification ? (
                       <>
-                        <td className="px-3 py-2 border-r border-[#E5E5E0]">{formatVal(c.mae)}</td>
-                        <td className="px-3 py-2 border-r border-[#E5E5E0]">{formatVal(c.r2)}</td>
+                        <td className="px-3 py-2 border-r border-[#D8D0BF]">{formatVal(c.mae)}</td>
+                        <td className="px-3 py-2 border-r border-[#D8D0BF]">{formatVal(c.r2)}</td>
                       </>
                     ) : (
                       <>
-                        <td className="px-3 py-2 border-r border-[#E5E5E0]">{formatVal(c.f1)}</td>
-                        <td className="px-3 py-2 border-r border-[#E5E5E0]">{formatVal(c.roc_auc)}</td>
+                        <td className="px-3 py-2 border-r border-[#D8D0BF]">{formatVal(c.f1)}</td>
+                        <td className="px-3 py-2 border-r border-[#D8D0BF]">{formatVal(c.roc_auc)}</td>
                       </>
                     )}
                     <td className="px-3 py-2">
                       {isSelected ? (
                         <span className="text-[#1b6a38]">Active</span>
                       ) : (
-                        <span className="text-[#737373]">Benchmarked</span>
+                        <span className="text-[#6B655A]">Benchmarked</span>
                       )}
                     </td>
                   </tr>
@@ -207,10 +207,10 @@ function FeatureChart({
   }));
 
   return (
-    <div className="border border-[#111111] bg-white p-6">
+    <div className="border border-[#111111] bg-[#FAF7EE] p-6">
       <div className="border-b border-[#111111] pb-3 mb-4">
         <h4 className="font-serif text-xl font-bold text-[#111111]">{title}</h4>
-        <p className="font-body text-xs text-[#525252] mt-0.5">{note}</p>
+        <p className="font-body text-xs text-[#4D483F] mt-0.5">{note}</p>
       </div>
 
       <div className="h-[260px] w-full">
@@ -218,7 +218,7 @@ function FeatureChart({
           <BarChart data={chartData} layout="vertical" margin={{ top: 5, right: 20, left: 90, bottom: 5 }}>
             <XAxis
               type="number"
-              tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+              tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
               axisLine={{ stroke: "#111111" }}
             />
             <YAxis
@@ -240,7 +240,7 @@ function FeatureChart({
 function Metric({ label, value }: { label: string; value: unknown }) {
   return (
     <div className="p-2 text-center">
-      <div className="text-[9px] uppercase tracking-wider text-[#737373]">{label}</div>
+      <div className="text-[9px] uppercase tracking-wider text-[#6B655A]">{label}</div>
       <div className="mt-1 text-base font-bold text-[#111111]">{formatVal(value)}</div>
     </div>
   );

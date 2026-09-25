@@ -26,10 +26,10 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
     <div className="fade-in space-y-12">
       {/* Newspaper Front Page Top Banner */}
       <div className="border-b-4 border-[#111111] pb-4">
-        <div className="flex flex-wrap items-center justify-between font-mono text-xs uppercase tracking-widest text-[#737373] pb-2">
+        <div className="flex flex-wrap items-center justify-between font-mono text-xs uppercase tracking-widest text-[#6B655A] pb-2">
           <span>SPECIAL EDITION · TECHNICAL DISPATCH</span>
           <span className="hidden sm:inline">OIL INDIA LIMITED · FIELD HEADQUARTERS</span>
-          <span className="text-[#CC0000] font-bold">CIRCULATION: UNRESTRICTED</span>
+          <span className="text-[#C41212] font-bold">CIRCULATION: UNRESTRICTED</span>
         </div>
 
         {/* Lead Headline */}
@@ -37,7 +37,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
           Cycle IV Steam Stimulation Delivers +18.4% Net Offtake Through Real-Time SRP Kinematics
         </h1>
 
-        <p className="mt-4 font-serif text-lg sm:text-xl text-[#525252] italic max-w-5xl leading-relaxed">
+        <p className="mt-4 font-serif text-lg sm:text-xl text-[#4D483F] italic max-w-5xl leading-relaxed">
           Baghewala heavy oil reservoir unlocks extra-dense reserves as STRATA's dual thermodynamic &
           sucker-rod AI digital twin bridges the gap between subsurface heat diffusion and surface mechanical lift.
         </p>
@@ -48,7 +48,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
         {/* Column 1: Lead Article with Drop Cap (4 cols) */}
         <div className="lg:col-span-4 space-y-5 border-b lg:border-b-0 lg:border-r border-[#111111] pb-8 lg:pb-0 lg:pr-8">
           <div className="flex items-center space-x-2 font-mono text-[10px] font-bold uppercase tracking-wider text-[#111111]">
-            <span className="h-2 w-2 bg-[#CC0000]" />
+            <span className="h-2 w-2 bg-[#C41212]" />
             <span>FIELD REPORT · BY DR. R. CHOUDHURY & AI SYSTEMS GROUP</span>
           </div>
 
@@ -78,9 +78,9 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
             </p>
           </div>
 
-          <div className="border border-[#111111] bg-[#F5F5F5] p-4 font-mono text-xs">
+          <div className="border border-[#111111] bg-[#EAE2D2] p-4 font-mono text-xs">
             <div className="font-bold uppercase text-[#111111] mb-1">Key Milestone: Well {selectedWell}</div>
-            <div className="text-[#525252] space-y-1 text-[11px]">
+            <div className="text-[#4D483F] space-y-1 text-[11px]">
               <div className="flex justify-between">
                 <span>Baseline Production:</span>
                 <span className="font-bold text-[#111111]">118.0 BOPD</span>
@@ -103,70 +103,70 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
 
         {/* Column 2: Wire Diagram / Technical Schematic (4 cols) */}
         <div className="lg:col-span-4 space-y-6 border-b lg:border-b-0 lg:border-r border-[#111111] pb-8 lg:pb-0 lg:pr-8">
-          <div className="border border-[#111111] bg-[#F9F9F7] p-2">
-            <div className="border border-[#111111] p-4 bg-white">
-              <div className="flex items-center justify-between border-b border-[#111111] pb-2 font-mono text-[10px] text-[#737373]">
+          <div className="border border-[#111111] bg-[#FAF7EE] p-2">
+            <div className="border border-[#111111] p-4 bg-[#FAF7EE]">
+              <div className="flex items-center justify-between border-b border-[#111111] pb-2 font-mono text-[10px] text-[#6B655A]">
                 <span>FIG. 1.0 — FIELD KINEMATICS</span>
                 <span>WELLBORE PROFILE</span>
               </div>
 
               {/* Technical Illustration Box */}
-              <div className="my-4 h-64 border border-[#111111] bg-[#F5F5F5] flex flex-col items-center justify-center relative overflow-hidden">
+              <div className="my-4 h-64 border border-[#111111] bg-[#EAE2D2] flex flex-col items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(#111_1px,transparent_1px)] opacity-15 [background-size:12px_12px]" />
                 {/* SVG Technical Representation */}
                 <svg viewBox="0 0 240 220" className="w-full h-full relative z-10" aria-label="Wellbore Diagram">
                   {/* Surface Level */}
                   <line x1="20" y1="40" x2="220" y2="40" stroke="#111111" strokeWidth="2" strokeDasharray="4 2" />
-                  <text x="25" y="35" fontFamily="JetBrains Mono" fontSize="8" fill="#737373">SURFACE 0.00 M</text>
+                  <text x="25" y="35" fontFamily="JetBrains Mono" fontSize="8" fill="#6B655A">SURFACE 0.00 M</text>
                   
                   {/* Pumpjack Walking Beam */}
                   <polygon points="50,38 75,15 145,28 140,38" fill="#111111" />
-                  <circle cx="75" cy="20" r="3" fill="#ffffff" stroke="#111111" strokeWidth="1.5" />
-                  <line x1="145" y1="28" x2="145" y2="180" stroke="#CC0000" strokeWidth="2" />
+                  <circle cx="75" cy="20" r="3" fill="#FAF7EE" stroke="#111111" strokeWidth="1.5" />
+                  <line x1="145" y1="28" x2="145" y2="180" stroke="#C41212" strokeWidth="2" />
                   
                   {/* Well Casing */}
                   <rect x="135" y="40" width="20" height="150" fill="none" stroke="#111111" strokeWidth="1.5" />
                   
                   {/* Thermal Steam Plume */}
-                  <ellipse cx="145" cy="180" rx="45" ry="25" fill="#CC0000" fillOpacity="0.15" stroke="#CC0000" strokeWidth="1" strokeDasharray="3 2" />
-                  <text x="145" y="184" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="8" fill="#CC0000" fontWeight="bold">
+                  <ellipse cx="145" cy="180" rx="45" ry="25" fill="#C41212" fillOpacity="0.15" stroke="#C41212" strokeWidth="1" strokeDasharray="3 2" />
+                  <text x="145" y="184" textAnchor="middle" fontFamily="JetBrains Mono" fontSize="8" fill="#C41212" fontWeight="bold">
                     HEATED PLUME 280°C
                   </text>
                   
                   {/* Reservoir Formation */}
                   <line x1="20" y1="160" x2="220" y2="160" stroke="#111111" strokeWidth="1" />
-                  <text x="25" y="155" fontFamily="JetBrains Mono" fontSize="8" fill="#737373">FORMATION TOP 1,220 M</text>
-                  <text x="25" y="210" fontFamily="JetBrains Mono" fontSize="8" fill="#737373">BAGHEWALA BITUMEN SANDS</text>
+                  <text x="25" y="155" fontFamily="JetBrains Mono" fontSize="8" fill="#6B655A">FORMATION TOP 1,220 M</text>
+                  <text x="25" y="210" fontFamily="JetBrains Mono" fontSize="8" fill="#6B655A">BAGHEWALA BITUMEN SANDS</text>
                 </svg>
               </div>
 
-              <div className="font-serif text-xs text-[#525252] leading-tight">
+              <div className="font-serif text-xs text-[#4D483F] leading-tight">
                 <span className="font-bold text-[#111111]">Fig. 1.0</span>: Real-time synchronization of walking beam stroke frequency (SPM) with the expansion diameter of the subterranean heated thermal boundary.
               </div>
             </div>
           </div>
 
           {/* Editorial Callout Box */}
-          <div className="border-4 border-[#111111] p-5 bg-[#F9F9F7]">
+          <div className="border-4 border-[#111111] p-5 bg-[#FAF7EE]">
             <h3 className="font-serif text-xl font-bold uppercase text-[#111111]">
               The Three Core Pillars
             </h3>
             <div className="mt-4 space-y-3 font-mono text-xs">
-              <div className="border-b border-[#E5E5E0] pb-2">
-                <div className="font-bold text-[#CC0000]">01. HYBRID PHYSICS-AI TWIN</div>
-                <p className="font-body text-xs text-[#525252] mt-0.5">
+              <div className="border-b border-[#D8D0BF] pb-2">
+                <div className="font-bold text-[#C41212]">01. HYBRID PHYSICS-AI TWIN</div>
+                <p className="font-body text-xs text-[#4D483F] mt-0.5">
                   Combines Boberg-Lantz thermal dissipation models with XGBoost surrogate estimators.
                 </p>
               </div>
-              <div className="border-b border-[#E5E5E0] pb-2">
-                <div className="font-bold text-[#CC0000]">02. MULTI-OBJECTIVE OPTIMIZER</div>
-                <p className="font-body text-xs text-[#525252] mt-0.5">
+              <div className="border-b border-[#D8D0BF] pb-2">
+                <div className="font-bold text-[#C41212]">02. MULTI-OBJECTIVE OPTIMIZER</div>
+                <p className="font-body text-xs text-[#4D483F] mt-0.5">
                   Pareto-optimal trade-offs balancing maximum crude barrels against steam expenditure and fatigue.
                 </p>
               </div>
               <div>
-                <div className="font-bold text-[#CC0000]">03. INSTANT ANOMALY SENTRY</div>
-                <p className="font-body text-xs text-[#525252] mt-0.5">
+                <div className="font-bold text-[#C41212]">03. INSTANT ANOMALY SENTRY</div>
+                <p className="font-body text-xs text-[#4D483F] mt-0.5">
                   Continuous acoustic & electrical load monitoring guarding against unseating, gas locking, and rod float.
                 </p>
               </div>
@@ -176,17 +176,17 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
 
         {/* Column 3: "Test the Levers" Interactive Sampler (4 cols) */}
         <div className="lg:col-span-4 space-y-6">
-          <div className="border-2 border-[#111111] bg-white p-5 hard-shadow">
+          <div className="border-2 border-[#111111] bg-[#FAF7EE] p-5 hard-shadow">
             <div className="flex items-center justify-between border-b-2 border-[#111111] pb-2">
               <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
                 INTERACTIVE LEVER TEST
               </span>
-              <span className="bg-[#CC0000] text-white px-2 py-0.5 font-mono text-[9px] font-bold">
+              <span className="bg-[#C41212] text-white px-2 py-0.5 font-mono text-[9px] font-bold">
                 SIMULATION
               </span>
             </div>
 
-            <p className="mt-3 font-body text-xs text-[#525252] leading-relaxed">
+            <p className="mt-3 font-body text-xs text-[#4D483F] leading-relaxed">
               Adjust the primary operational levers below to observe the immediate AI forecast for production,
               steam efficiency, and mechanical hazard before applying setpoints in the field terminal.
             </p>
@@ -196,7 +196,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
               <div>
                 <div className="flex justify-between font-mono text-xs mb-1">
                   <span className="text-[#111111] font-semibold">Steam Volume (t):</span>
-                  <span className="font-bold text-[#CC0000]">{steamInput} tonnes</span>
+                  <span className="font-bold text-[#C41212]">{steamInput} tonnes</span>
                 </div>
                 <input
                   type="range"
@@ -207,7 +207,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
                   onChange={(e) => setSteamInput(Number(e.target.value))}
                   className="slider"
                 />
-                <div className="flex justify-between font-mono text-[9px] text-[#737373] mt-1">
+                <div className="flex justify-between font-mono text-[9px] text-[#6B655A] mt-1">
                   <span>250 t (Economy)</span>
                   <span>750 t (Aggressive)</span>
                 </div>
@@ -217,7 +217,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
               <div>
                 <div className="flex justify-between font-mono text-xs mb-1">
                   <span className="text-[#111111] font-semibold">Pumping Speed (SPM):</span>
-                  <span className="font-bold text-[#CC0000]">{spmInput} strokes/min</span>
+                  <span className="font-bold text-[#C41212]">{spmInput} strokes/min</span>
                 </div>
                 <input
                   type="range"
@@ -228,7 +228,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
                   onChange={(e) => setSpmInput(Number(e.target.value))}
                   className="slider"
                 />
-                <div className="flex justify-between font-mono text-[9px] text-[#737373] mt-1">
+                <div className="flex justify-between font-mono text-[9px] text-[#6B655A] mt-1">
                   <span>3.0 SPM (Gentle)</span>
                   <span>9.0 SPM (Over-drive)</span>
                 </div>
@@ -237,22 +237,22 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
 
             {/* Simulated Live Results Grid */}
             <div className="mt-6 border-t-2 border-[#111111] pt-4 grid grid-cols-3 gap-2 text-center font-mono">
-              <div className="border border-[#111111] bg-[#F9F9F7] p-2">
-                <div className="text-[9px] uppercase text-[#737373]">EST. RATE</div>
+              <div className="border border-[#111111] bg-[#EAE2D2] p-2">
+                <div className="text-[9px] uppercase text-[#6B655A]">EST. RATE</div>
                 <div className="text-base font-bold text-[#111111]">{simBopd}</div>
-                <div className="text-[9px] text-[#737373]">BOPD</div>
+                <div className="text-[9px] text-[#6B655A]">BOPD</div>
               </div>
-              <div className="border border-[#111111] bg-[#F9F9F7] p-2">
-                <div className="text-[9px] uppercase text-[#737373]">EST. SOR</div>
+              <div className="border border-[#111111] bg-[#EAE2D2] p-2">
+                <div className="text-[9px] uppercase text-[#6B655A]">EST. SOR</div>
                 <div className="text-base font-bold text-[#111111]">{simSor}</div>
-                <div className="text-[9px] text-[#737373]">t/bbl</div>
+                <div className="text-[9px] text-[#6B655A]">t/bbl</div>
               </div>
-              <div className="border border-[#111111] bg-[#F9F9F7] p-2">
-                <div className="text-[9px] uppercase text-[#737373]">FATIGUE</div>
-                <div className={`text-base font-bold ${simRisk > 30 ? "text-[#CC0000]" : "text-[#1b6a38]"}`}>
+              <div className="border border-[#111111] bg-[#EAE2D2] p-2">
+                <div className="text-[9px] uppercase text-[#6B655A]">FATIGUE</div>
+                <div className={`text-base font-bold ${simRisk > 30 ? "text-[#C41212]" : "text-[#1b6a38]"}`}>
                   {simRisk}%
                 </div>
-                <div className="text-[9px] text-[#737373]">RISK</div>
+                <div className="text-[9px] text-[#6B655A]">RISK</div>
               </div>
             </div>
 
@@ -267,7 +267,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
           </div>
 
           {/* Quick Nav Card */}
-          <div className="border border-[#111111] bg-[#F5F5F5] p-5">
+          <div className="border border-[#111111] bg-[#EAE2D2] p-5">
             <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111] mb-2">
               Dispatch Terminal Direct Access
             </h4>
@@ -275,7 +275,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
               <button
                 type="button"
                 onClick={() => onNavigate("overview")}
-                className="flex w-full items-center justify-between border border-[#111111] bg-[#F9F9F7] px-3 py-2 text-left hover:bg-[#111111] hover:text-[#F9F9F7] transition-all"
+                className="flex w-full items-center justify-between border border-[#111111] bg-[#FAF7EE] px-3 py-2 text-left hover:bg-[#111111] hover:text-[#FAF7EE] transition-all"
               >
                 <span>§ 01 WELL OVERVIEW</span>
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -283,7 +283,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
               <button
                 type="button"
                 onClick={() => onNavigate("twin")}
-                className="flex w-full items-center justify-between border border-[#111111] bg-[#F9F9F7] px-3 py-2 text-left hover:bg-[#111111] hover:text-[#F9F9F7] transition-all"
+                className="flex w-full items-center justify-between border border-[#111111] bg-[#FAF7EE] px-3 py-2 text-left hover:bg-[#111111] hover:text-[#FAF7EE] transition-all"
               >
                 <span>§ 04 3D KINEMATICS TWIN</span>
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -291,7 +291,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
               <button
                 type="button"
                 onClick={() => onNavigate("alerts")}
-                className="flex w-full items-center justify-between border border-[#111111] bg-[#F9F9F7] px-3 py-2 text-left hover:bg-[#111111] hover:text-[#F9F9F7] transition-all"
+                className="flex w-full items-center justify-between border border-[#111111] bg-[#FAF7EE] px-3 py-2 text-left hover:bg-[#111111] hover:text-[#FAF7EE] transition-all"
               >
                 <span>§ 05 RISK & TELEGRAM LOG</span>
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -302,16 +302,16 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
       </div>
 
       {/* Hero Action Broad Bar */}
-      <section className="border-4 border-[#111111] bg-[#111111] text-[#F9F9F7] p-8 sm:p-12 relative overflow-hidden">
+      <section className="border-4 border-[#111111] bg-[#111111] text-[#FAF7EE] p-8 sm:p-12 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="max-w-3xl">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#CC0000] font-bold">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#C41212] font-bold">
               AUTONOMOUS FIELD COMMISSIONING
             </span>
             <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
               Ready to execute calibrated CSS & SRP setpoints on {selectedWell}?
             </h2>
-            <p className="mt-3 font-body text-sm text-[#A3A3A3] leading-relaxed">
+            <p className="mt-3 font-body text-sm text-[#8C867A] leading-relaxed">
               Proceed directly into the operational executive cockpit. Monitor live acoustic telemetry, examine
               interactive dynagraph cards, simulate reservoir heat depletion, and retrain models on new field assays.
             </p>
@@ -321,14 +321,14 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
             <button
               type="button"
               onClick={() => onNavigate("overview")}
-              className="bg-white text-[#111111] border border-white font-mono text-xs font-bold uppercase tracking-widest px-6 py-4 hover:bg-[#CC0000] hover:text-white hover:border-[#CC0000] transition-all text-center"
+              className="bg-[#FAF7EE] text-[#111111] border border-[#FAF7EE] font-mono text-xs font-bold uppercase tracking-widest px-6 py-4 hover:bg-[#C41212] hover:text-white hover:border-[#C41212] transition-all text-center"
             >
               Enter Operations Terminal
             </button>
             <button
               type="button"
               onClick={() => onNavigate("twin")}
-              className="border border-white bg-transparent text-white font-mono text-xs font-bold uppercase tracking-widest px-6 py-4 hover:bg-white hover:text-[#111111] transition-all text-center"
+              className="border border-white bg-transparent text-white font-mono text-xs font-bold uppercase tracking-widest px-6 py-4 hover:bg-[#FAF7EE] hover:text-[#111111] transition-all text-center"
             >
               Inspect 3D Twin
             </button>
@@ -337,7 +337,7 @@ export function LandingPage({ onNavigate, dashboard, selectedWell }: Props) {
       </section>
 
       {/* Editorial Section Divider */}
-      <div className="py-2 text-center font-serif text-2xl text-[#737373] tracking-[1.5em] select-none">
+      <div className="py-2 text-center font-serif text-2xl text-[#6B655A] tracking-[1.5em] select-none">
         &#x2727; &#x2727; &#x2727;
       </div>
     </div>

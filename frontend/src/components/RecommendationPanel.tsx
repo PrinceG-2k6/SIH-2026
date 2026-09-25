@@ -26,10 +26,10 @@ export function RecommendationPanel({ prediction, optimization, comparison }: Pr
       {/* Setpoints & Models In Play */}
       <section className="grid gap-8 lg:grid-cols-12 items-start">
         {/* Left Column: Recommended Setpoints */}
-        <div className="lg:col-span-7 border-2 border-[#111111] bg-white p-6 hard-shadow">
+        <div className="lg:col-span-7 border-2 border-[#111111] bg-[#FAF7EE] p-6 hard-shadow">
           <div className="flex items-center justify-between border-b-2 border-[#111111] pb-3">
             <div>
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
                 RECOMMENDED OPERATING SETPOINTS
               </span>
               <h3 className="font-serif text-2xl font-bold text-[#111111]">
@@ -55,14 +55,14 @@ export function RecommendationPanel({ prediction, optimization, comparison }: Pr
         </div>
 
         {/* Right Column: AI Model Rationale */}
-        <div className="lg:col-span-5 border border-[#111111] bg-[#F5F5F5] p-6">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+        <div className="lg:col-span-5 border border-[#111111] bg-[#EAE2D2] p-6">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
             DECISION RATIONALE
           </span>
           <h4 className="mt-1 font-serif text-xl font-bold text-[#111111]">
             Surrogate Models in Synthesis
           </h4>
-          <p className="mt-2 font-mono text-xs text-[#525252]">
+          <p className="mt-2 font-mono text-xs text-[#4D483F]">
             Production Engine: <span className="font-bold text-[#111111]">{prediction.model_production}</span><br />
             Failure Risk Classifier: <span className="font-bold text-[#111111]">{prediction.model_failure}</span>
           </p>
@@ -70,7 +70,7 @@ export function RecommendationPanel({ prediction, optimization, comparison }: Pr
           <div className="mt-4 border-t border-[#111111] pt-3 space-y-2.5">
             {optimization.explanation.map((line, idx) => (
               <div key={idx} className="flex items-start gap-2.5 font-body text-xs text-[#111111] leading-relaxed">
-                <span className="font-mono font-bold text-[#CC0000] mt-0.5">§{idx + 1}</span>
+                <span className="font-mono font-bold text-[#C41212] mt-0.5">§{idx + 1}</span>
                 <span>{line}</span>
               </div>
             ))}
@@ -79,17 +79,17 @@ export function RecommendationPanel({ prediction, optimization, comparison }: Pr
       </section>
 
       {/* Comparison Ledger */}
-      <section className="border border-[#111111] bg-white p-6">
+      <section className="border border-[#111111] bg-[#FAF7EE] p-6">
         <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-[#111111] pb-3">
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
               VERIFICATION LEDGER
             </span>
             <h3 className="font-serif text-2xl font-bold text-[#111111]">
               Current Baseline vs AI Recommended Equilibrium
             </h3>
           </div>
-          <p className="font-mono text-xs text-[#525252] max-w-md">
+          <p className="font-mono text-xs text-[#4D483F] max-w-md">
             {comparison.summary}
           </p>
         </div>
@@ -97,31 +97,31 @@ export function RecommendationPanel({ prediction, optimization, comparison }: Pr
         <div className="mt-6 overflow-x-auto">
           <table className="min-w-full text-left font-mono text-xs border border-[#111111]">
             <thead>
-              <tr className="border-b border-[#111111] bg-[#111111] text-[#F9F9F7]">
+              <tr className="border-b border-[#111111] bg-[#111111] text-[#FAF7EE]">
                 <th className="px-4 py-3 uppercase tracking-wider font-bold">Operational Metric</th>
                 <th className="px-4 py-3 uppercase tracking-wider font-bold">Current Point</th>
                 <th className="px-4 py-3 uppercase tracking-wider font-bold">Recommended Point</th>
                 <th className="px-4 py-3 uppercase tracking-wider font-bold">Net Deviation</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E5E5E0]">
+            <tbody className="divide-y divide-[#D8D0BF]">
               {tableRows.map((row, i) => {
                 const isEven = i % 2 === 0;
                 let chgColor = "text-[#111111]";
                 if (row.chg !== undefined) {
                   const isGood = row.isGoodWhenPos ? row.chg > 0 : row.chg < 0;
-                  chgColor = isGood ? "text-[#1b6a38] font-bold" : "text-[#CC0000] font-bold";
+                  chgColor = isGood ? "text-[#1b6a38] font-bold" : "text-[#C41212] font-bold";
                 }
 
                 return (
-                  <tr key={row.metric} className={isEven ? "bg-white" : "bg-[#F9F9F7]"}>
-                    <td className="px-4 py-3 font-semibold text-[#111111] border-r border-[#E5E5E0]">
+                  <tr key={row.metric} className={isEven ? "bg-[#FAF7EE]" : "bg-[#EAE2D2]"}>
+                    <td className="px-4 py-3 font-semibold text-[#111111] border-r border-[#D8D0BF]">
                       {row.metric}
                     </td>
-                    <td className="px-4 py-3 text-[#525252] border-r border-[#E5E5E0]">
+                    <td className="px-4 py-3 text-[#4D483F] border-r border-[#D8D0BF]">
                       {row.cur}
                     </td>
-                    <td className="px-4 py-3 font-bold text-[#111111] border-r border-[#E5E5E0]">
+                    <td className="px-4 py-3 font-bold text-[#111111] border-r border-[#D8D0BF]">
                       {row.rec}
                     </td>
                     <td className={`px-4 py-3 ${chgColor}`}>
@@ -157,10 +157,10 @@ function ParamBox({
   return (
     <div
       className={`border-r border-b border-[#111111] p-3 font-mono ${
-        highlight ? "bg-[#111111] text-[#F9F9F7]" : "bg-white text-[#111111]"
+        highlight ? "bg-[#111111] text-[#FAF7EE]" : "bg-[#FAF7EE] text-[#111111]"
       }`}
     >
-      <div className={`text-[9px] uppercase tracking-wider ${highlight ? "text-[#CC0000]" : "text-[#737373]"}`}>
+      <div className={`text-[9px] uppercase tracking-wider ${highlight ? "text-[#C41212]" : "text-[#6B655A]"}`}>
         {label}
       </div>
       <div className="mt-1 text-sm font-bold tracking-tight">

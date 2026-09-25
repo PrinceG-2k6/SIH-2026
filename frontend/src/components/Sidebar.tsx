@@ -59,12 +59,12 @@ export function Sidebar({
   const selectedWellMeta = wells.find((w) => w.well_id === selectedWell);
 
   const sidebarContent = (
-    <div className="flex h-full flex-col justify-between bg-[#F9F9F7] text-[#111111]">
+    <div className="flex h-full flex-col justify-between bg-[#F2ECE1] text-[#111111]">
       {/* Top Colophon & Masthead */}
       <div>
         <div className="border-b border-[#111111] p-5">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#737373]">
+            <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-[#6B655A]">
               EST. 2026 · OIL INDIA LTD
             </span>
             <span className="border border-[#111111] bg-[#111111] px-1.5 py-0.5 font-mono text-[9px] font-bold text-white uppercase">
@@ -76,22 +76,22 @@ export function Sidebar({
             <h1 className="font-serif text-3xl font-black tracking-tight text-[#111111]">
               STRATA
             </h1>
-            <p className="font-serif text-[11px] italic tracking-wide text-[#525252]">
+            <p className="font-serif text-[11px] italic tracking-wide text-[#4D483F]">
               The Deep Sandstone Intelligence & Wellhead Operational Record
             </p>
           </div>
 
-          <div className="mt-2 flex items-center space-x-2 border-t border-[#E5E5E0] pt-2 font-mono text-[9px] text-[#737373] uppercase tracking-wider">
+          <div className="mt-2 flex items-center space-x-2 border-t border-[#D8D0BF] pt-2 font-mono text-[9px] text-[#6B655A] uppercase tracking-wider">
             <span>Vol. XXIV</span>
             <span>·</span>
             <span>Issue 104</span>
             <span>·</span>
-            <span className="text-[#CC0000] font-bold">LIVE TELEMETRY</span>
+            <span className="text-[#C41212] font-bold">LIVE TELEMETRY</span>
           </div>
         </div>
 
         {/* Well Selector Box */}
-        <div className="border-b border-[#111111] bg-[#F5F5F5] p-4">
+        <div className="border-b border-[#111111] bg-[#EAE2D2] p-4">
           <label className="block">
             <div className="mb-1.5 flex items-center justify-between">
               <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111111]">
@@ -105,7 +105,7 @@ export function Sidebar({
             <select
               value={selectedWell}
               onChange={(e) => onWellChange(e.target.value)}
-              className="w-full border border-[#111111] bg-[#F9F9F7] px-3 py-2 font-mono text-xs font-semibold text-[#111111] focus:outline-none"
+              className="w-full border border-[#111111] bg-[#FAF7EE] px-3 py-2 font-mono text-xs font-semibold text-[#111111] focus:outline-none"
             >
               {wells.length > 0 ? (
                 wells.map((w) => (
@@ -119,7 +119,7 @@ export function Sidebar({
             </select>
           </label>
           {selectedWellMeta && (
-            <div className="mt-2 flex justify-between font-mono text-[10px] text-[#737373]">
+            <div className="mt-2 flex justify-between font-mono text-[10px] text-[#6B655A]">
               <span>Gravity: {selectedWellMeta.api_gravity}° API</span>
               <span className="uppercase">{selectedWellMeta.status}</span>
             </div>
@@ -128,7 +128,7 @@ export function Sidebar({
 
         {/* Section Navigation */}
         <div className="p-3">
-          <div className="mb-2 px-2 font-mono text-[9px] font-bold uppercase tracking-widest text-[#737373]">
+          <div className="mb-2 px-2 font-mono text-[9px] font-bold uppercase tracking-widest text-[#6B655A]">
             TABLE OF CONTENTS
           </div>
           <nav className="space-y-1">
@@ -142,22 +142,22 @@ export function Sidebar({
                   onClick={() => handleNav(item.id)}
                   className={`group flex w-full items-center justify-between border px-3 py-2.5 text-left transition-all ${
                     active
-                      ? "border-[#111111] bg-[#111111] text-[#F9F9F7]"
-                      : "border-transparent text-[#111111] hover:border-[#111111] hover:bg-[#F0F0EC]"
+                      ? "border-[#111111] bg-[#111111] text-[#FAF7EE]"
+                      : "border-transparent text-[#111111] hover:border-[#111111] hover:bg-[#EAE2D2]"
                   }`}
                 >
                   <div className="flex items-center space-x-2.5">
                     <span
                       className={`font-mono text-[11px] ${
-                        active ? "text-[#CC0000] font-bold" : "text-[#737373] group-hover:text-[#111111]"
+                        active ? "text-[#C41212] font-bold" : "text-[#6B655A] group-hover:text-[#111111]"
                       }`}
                     >
                       {item.section}
                     </span>
-                    <Icon className={`h-4 w-4 stroke-[1.5] ${active ? "text-[#F9F9F7]" : "text-[#525252]"}`} />
+                    <Icon className={`h-4 w-4 stroke-[1.5] ${active ? "text-[#FAF7EE]" : "text-[#4D483F]"}`} />
                     <span
                       className={`font-sans text-xs font-semibold tracking-wide uppercase ${
-                        active ? "text-[#F9F9F7]" : "text-[#111111]"
+                        active ? "text-[#FAF7EE]" : "text-[#111111]"
                       }`}
                     >
                       {item.label}
@@ -167,7 +167,7 @@ export function Sidebar({
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
                       className={`px-1.5 py-0.2 font-mono text-[10px] font-bold ${
-                        active ? "bg-[#CC0000] text-white" : "bg-[#CC0000] text-white"
+                        active ? "bg-[#C41212] text-white" : "bg-[#C41212] text-white"
                       }`}
                     >
                       {item.badge}
@@ -181,8 +181,8 @@ export function Sidebar({
       </div>
 
       {/* Bottom Editorial Colophon */}
-      <div className="border-t border-[#111111] p-4 text-[10px] font-mono text-[#737373]">
-        <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-2">
+      <div className="border-t border-[#111111] p-4 text-[10px] font-mono text-[#6B655A]">
+        <div className="flex items-center justify-between border-b border-[#D8D0BF] pb-2">
           <span>FIELD BASIN</span>
           <span className="font-bold text-[#111111]">BAGHEWALA</span>
         </div>
@@ -190,11 +190,11 @@ export function Sidebar({
           <span>RESERVOIR DEPTH</span>
           <span className="font-bold text-[#111111]">1,250 M</span>
         </div>
-        <div className="flex items-center justify-between border-b border-[#E5E5E0] pb-1">
+        <div className="flex items-center justify-between border-b border-[#D8D0BF] pb-1">
           <span>OPTIMIZER</span>
-          <span className="font-bold text-[#CC0000]">ACTIVE · CONSTRAINED</span>
+          <span className="font-bold text-[#C41212]">ACTIVE · CONSTRAINED</span>
         </div>
-        <p className="mt-3 text-[9px] leading-tight text-[#A3A3A3] italic">
+        <p className="mt-3 text-[9px] leading-tight text-[#8C867A] italic">
           Printed in Jodhpur & Duliajan. Autonomous decision-support prototype.
         </p>
       </div>
@@ -211,7 +211,7 @@ export function Sidebar({
       </aside>
 
       {/* Mobile Top Bar with Hamburger */}
-      <div className="flex items-center justify-between border-b border-[#111111] bg-[#F9F9F7] px-4 py-3 lg:hidden">
+      <div className="flex items-center justify-between border-b border-[#111111] bg-[#F2ECE1] px-4 py-3 lg:hidden">
         <div className="flex items-center space-x-2">
           <span className="border border-[#111111] bg-[#111111] px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
             STRATA
@@ -223,7 +223,7 @@ export function Sidebar({
         <button
           type="button"
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="border border-[#111111] p-1.5 text-[#111111] hover:bg-[#111111] hover:text-[#F9F9F7]"
+          className="border border-[#111111] p-1.5 text-[#111111] hover:bg-[#111111] hover:text-[#FAF7EE]"
           aria-label="Toggle Navigation Menu"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -238,7 +238,7 @@ export function Sidebar({
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <div className="relative z-10 w-80 max-w-[85vw] border-r border-[#111111] bg-[#F9F9F7]">
+          <div className="relative z-10 w-80 max-w-[85vw] border-r border-[#111111] bg-[#F2ECE1]">
             {sidebarContent}
           </div>
         </div>

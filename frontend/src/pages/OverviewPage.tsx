@@ -39,8 +39,8 @@ export function OverviewPage({ data, wellId }: Props) {
 
       {/* Hero Broadsheet Banner */}
       <section className="border-b-4 border-[#111111] pb-8">
-        <div className="flex flex-wrap items-center justify-between border-b border-[#111111] pb-2 font-mono text-[10px] uppercase tracking-widest text-[#737373]">
-          <span className="font-bold text-[#CC0000]">OPERATIONAL DISPATCH · BOREHOLE {wellId}</span>
+        <div className="flex flex-wrap items-center justify-between border-b border-[#111111] pb-2 font-mono text-[10px] uppercase tracking-widest text-[#6B655A]">
+          <span className="font-bold text-[#C41212]">OPERATIONAL DISPATCH · BOREHOLE {wellId}</span>
           <span>CSS STIMULATION CYCLE: #{state.css_cycle_id}</span>
           <span>FORMATION: JODHPUR SANDSTONE</span>
         </div>
@@ -48,7 +48,7 @@ export function OverviewPage({ data, wellId }: Props) {
         <div className="mt-6 grid gap-8 lg:grid-cols-12 items-start">
           {/* Main Production Metric & Lead Story (7 cols) */}
           <div className="lg:col-span-7 space-y-4 lg:border-r border-[#111111] lg:pr-8">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#525252]">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#4D483F]">
               CURRENT MEASURED OFFTAKE
             </span>
 
@@ -56,21 +56,21 @@ export function OverviewPage({ data, wellId }: Props) {
               <span className="font-serif text-6xl sm:text-7xl lg:text-8xl font-black tracking-tight text-[#111111] leading-none">
                 <AnimatedNumber value={state.oil_rate_bopd} decimals={1} />
               </span>
-              <span className="ml-3 font-mono text-xl sm:text-2xl font-bold text-[#737373]">
+              <span className="ml-3 font-mono text-xl sm:text-2xl font-bold text-[#6B655A]">
                 BOPD
               </span>
             </div>
 
-            <div className="h-[2px] w-24 bg-[#CC0000]" />
+            <div className="h-[2px] w-24 bg-[#C41212]" />
 
             <p className="font-body text-sm sm:text-base text-[#111111] leading-relaxed max-w-2xl text-justify">
               {story}
             </p>
 
             {/* Quick Index Metrics */}
-            <div className="pt-4 flex flex-wrap items-center gap-8 border-t border-[#E5E5E0]">
-              <div className="border border-[#111111] bg-white p-3 min-w-[140px]">
-                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373]">
+            <div className="pt-4 flex flex-wrap items-center gap-8 border-t border-[#D8D0BF]">
+              <div className="border border-[#111111] bg-[#FAF7EE] p-3 min-w-[140px]">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#6B655A]">
                   90-Day Trend
                 </div>
                 <div className="mt-1">
@@ -78,8 +78,8 @@ export function OverviewPage({ data, wellId }: Props) {
                 </div>
               </div>
 
-              <div className="border border-[#111111] bg-white p-3 min-w-[140px]">
-                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373]">
+              <div className="border border-[#111111] bg-[#FAF7EE] p-3 min-w-[140px]">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#6B655A]">
                   AI vs Current
                 </div>
                 <div
@@ -92,8 +92,8 @@ export function OverviewPage({ data, wellId }: Props) {
                 </div>
               </div>
 
-              <div className="border border-[#111111] bg-white p-3 min-w-[140px]">
-                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373]">
+              <div className="border border-[#111111] bg-[#FAF7EE] p-3 min-w-[140px]">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#6B655A]">
                   SOR Ratio
                 </div>
                 <div className="mt-1 font-mono text-xl font-bold text-[#111111]">
@@ -104,12 +104,12 @@ export function OverviewPage({ data, wellId }: Props) {
           </div>
 
           {/* Instrument Board with Gauges (5 cols) */}
-          <div className="lg:col-span-5 border border-[#111111] bg-[#F5F5F5] p-5 hard-shadow">
+          <div className="lg:col-span-5 border border-[#111111] bg-[#EAE2D2] p-5 hard-shadow">
             <div className="border-b border-[#111111] pb-2 flex items-center justify-between">
               <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
                 INSTRUMENT TELEMETRY CONSOLE
               </span>
-              <span className="font-mono text-[9px] text-[#737373]">REAL-TIME</span>
+              <span className="font-mono text-[9px] text-[#6B655A]">REAL-TIME</span>
             </div>
 
             <div className="mt-5 grid grid-cols-3 gap-3">
@@ -140,17 +140,17 @@ export function OverviewPage({ data, wellId }: Props) {
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#111111] pt-3">
-              <div className="border border-[#111111] bg-white p-2">
-                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373] mb-1">
+              <div className="border border-[#111111] bg-[#FAF7EE] p-2">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#6B655A] mb-1">
                   Temp History
                 </div>
                 <Sparkline values={tempSeries} color="#111111" width={110} height={24} />
               </div>
-              <div className="border border-[#111111] bg-white p-2">
-                <div className="font-mono text-[9px] uppercase tracking-wider text-[#737373] mb-1">
+              <div className="border border-[#111111] bg-[#FAF7EE] p-2">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#6B655A] mb-1">
                   Hazard History
                 </div>
-                <Sparkline values={failSeries} color="#CC0000" width={110} height={24} />
+                <Sparkline values={failSeries} color="#C41212" width={110} height={24} />
               </div>
             </div>
           </div>
@@ -158,8 +158,8 @@ export function OverviewPage({ data, wellId }: Props) {
       </section>
 
       {/* Telemetry Rail — Newspaper Columns with Collapsed Borders */}
-      <section className="border border-[#111111] bg-white">
-        <div className="border-b border-[#111111] bg-[#111111] text-[#F9F9F7] px-4 py-2 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest">
+      <section className="border border-[#111111] bg-[#FAF7EE]">
+        <div className="border-b border-[#111111] bg-[#111111] text-[#FAF7EE] px-4 py-2 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest">
           <span>FIELD TELEMETRY LEDGER</span>
           <span>CALIBRATED TO OIL SPECIFICATIONS</span>
         </div>
@@ -177,9 +177,9 @@ export function OverviewPage({ data, wellId }: Props) {
 
       {/* Active Alerts Notice */}
       {data.alerts?.alert_count > 0 && (
-        <div className="border-2 border-[#CC0000] bg-[#FFF5F5] p-4 flex items-center justify-between font-mono text-xs text-[#CC0000]">
+        <div className="border-2 border-[#C41212] bg-[#F7EBEB] p-4 flex items-center justify-between font-mono text-xs text-[#C41212]">
           <div className="flex items-center space-x-2">
-            <span className="bg-[#CC0000] text-white px-2 py-0.5 font-bold uppercase text-[10px]">
+            <span className="bg-[#C41212] text-white px-2 py-0.5 font-bold uppercase text-[10px]">
               ACTION REQUIRED
             </span>
             <span className="font-bold">
@@ -195,7 +195,7 @@ export function OverviewPage({ data, wellId }: Props) {
       {/* Field History Chronology */}
       <section>
         <div className="border-b-2 border-[#111111] pb-2 mb-6">
-          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
             HISTORICAL CHRONOLOGY
           </span>
           <h3 className="font-serif text-3xl font-black text-[#111111] uppercase">
@@ -206,10 +206,10 @@ export function OverviewPage({ data, wellId }: Props) {
       </section>
 
       {/* Forecast Bridge */}
-      <section className="border border-[#111111] bg-white p-6 md:p-8">
+      <section className="border border-[#111111] bg-[#FAF7EE] p-6 md:p-8">
         <div className="grid gap-8 lg:grid-cols-2 items-start">
           <div className="space-y-3 lg:border-r border-[#111111] lg:pr-8">
-            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+            <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
               BASELINE PROJECTION
             </span>
             <h4 className="font-serif text-2xl font-bold text-[#111111]">
@@ -219,9 +219,9 @@ export function OverviewPage({ data, wellId }: Props) {
               <span className="font-serif text-5xl font-bold text-[#111111]">
                 <AnimatedNumber value={pred.predicted_oil_rate_bopd} decimals={1} />
               </span>
-              <span className="ml-2 text-sm text-[#737373]">BOPD</span>
+              <span className="ml-2 text-sm text-[#6B655A]">BOPD</span>
             </div>
-            <p className="font-body text-xs text-[#525252] leading-relaxed">
+            <p className="font-body text-xs text-[#4D483F] leading-relaxed">
               If operating levers remain unaltered: temperature projects to{" "}
               <span className="font-mono font-bold text-[#111111]">{pred.predicted_reservoir_temperature}°C</span>,
               viscosity at <span className="font-mono font-bold text-[#111111]">{pred.predicted_oil_viscosity.toFixed(0)} cP</span>,
@@ -236,12 +236,12 @@ export function OverviewPage({ data, wellId }: Props) {
             <h4 className="font-serif text-2xl font-bold text-[#111111]">
               Under Synchronous AI Governance
             </h4>
-            <p className="font-body text-xs text-[#525252] leading-relaxed">
+            <p className="font-body text-xs text-[#4D483F] leading-relaxed">
               With Steam at <span className="font-mono font-bold text-[#111111]">{data.optimization.recommended.parameters.steam_volume} t</span>,
               cadence at <span className="font-mono font-bold text-[#111111]">{data.optimization.recommended.parameters.spm} SPM</span>,
               and stroke at <span className="font-mono font-bold text-[#111111]">{data.optimization.recommended.parameters.stroke_length} m</span>:
             </p>
-            <div className="border border-[#111111] bg-[#F9F9F7] p-4 font-mono text-xs space-y-1">
+            <div className="border border-[#111111] bg-[#EAE2D2] p-4 font-mono text-xs space-y-1">
               <div className="flex justify-between">
                 <span>Net Offtake Shift:</span>
                 <span className={prodDelta >= 0 ? "font-bold text-[#1b6a38]" : "font-bold text-[#a65800]"}>
@@ -291,10 +291,10 @@ function VitalBox({
 }) {
   return (
     <div className="p-4 font-mono text-center">
-      <div className="text-[9px] uppercase tracking-wider text-[#737373] font-bold">{label}</div>
+      <div className="text-[9px] uppercase tracking-wider text-[#6B655A] font-bold">{label}</div>
       <div className="mt-1 text-lg font-bold text-[#111111]">
         <AnimatedNumber value={value} decimals={decimals} />
-        {unit && <span className="ml-0.5 text-[10px] text-[#737373]"> {unit}</span>}
+        {unit && <span className="ml-0.5 text-[10px] text-[#6B655A]"> {unit}</span>}
       </div>
     </div>
   );

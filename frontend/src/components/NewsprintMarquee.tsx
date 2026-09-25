@@ -27,25 +27,25 @@ export function NewsprintMarquee({
   ];
 
   return (
-    <div className="relative overflow-hidden border-y border-[#111111] bg-[#111111] py-1.5 text-[#F9F9F7]">
+    <div className="relative overflow-hidden border-y border-[#111111] bg-[#111111] py-1.5 text-[#FAF7EE]">
       <div className="flex w-max animate-marquee space-x-8 whitespace-nowrap">
         {[...items, ...items, ...items].map((item, idx) => (
           <div key={idx} className="flex items-center space-x-2 text-[11px] font-mono tracking-wider">
             {item.highlight ? (
-              <span className="bg-[#CC0000] px-1.5 py-0.5 text-[9px] font-bold text-white uppercase">
+              <span className="bg-[#C41212] px-1.5 py-0.5 text-[9px] font-bold text-white uppercase">
                 {item.label}
               </span>
             ) : item.alert ? (
-              <span className="bg-[#CC0000] px-1.5 py-0.5 text-[9px] font-bold text-white uppercase">
+              <span className="bg-[#C41212] px-1.5 py-0.5 text-[9px] font-bold text-white uppercase">
                 {item.label}
               </span>
             ) : (
-              <span className="text-[#A3A3A3] uppercase">{item.label}:</span>
+              <span className="text-[#8C867A] uppercase">{item.label}:</span>
             )}
-            <span className={item.highlight ? "font-bold text-[#F9F9F7]" : "text-[#E5E5E5]"}>
+            <span className={item.highlight ? "font-bold text-[#FAF7EE]" : "text-[#DED6C4]"}>
               {item.value}
             </span>
-            <span className="text-[#525252] select-none">/</span>
+            <span className="text-[#6B655A] select-none">/</span>
           </div>
         ))}
       </div>

@@ -41,7 +41,7 @@ export function Sparkline({
         y={height - ((last - min) / span) * (height - 4) - 4}
         width="4"
         height="4"
-        fill={up ? "#1b6a38" : "#CC0000"}
+        fill={up ? "#1b6a38" : "#C41212"}
       />
     </svg>
   );

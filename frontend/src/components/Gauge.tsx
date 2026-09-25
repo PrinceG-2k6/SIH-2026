@@ -15,10 +15,10 @@ export function Gauge({
   size?: number;
 }) {
   const colors = {
-    accent: "#CC0000",
+    accent: "#C41212",
     good: "#1b6a38",
     warn: "#a65800",
-    bad: "#CC0000",
+    bad: "#C41212",
     info: "#111111",
   };
   const stroke = colors[tone] || "#111111";
@@ -28,10 +28,10 @@ export function Gauge({
   const dash = c * pct;
 
   return (
-    <div className="flex flex-col items-center justify-center p-3 border border-[#111111] bg-[#F9F9F7] min-w-[120px]">
+    <div className="flex flex-col items-center justify-center p-3 border border-[#111111] bg-[#FAF7EE] min-w-[120px]">
       <svg width={size} height={size} viewBox="0 0 100 100" className="gauge-ring">
         {/* Background Track */}
-        <circle cx="50" cy="50" r={r} fill="none" stroke="#E5E5E0" strokeWidth="6" />
+        <circle cx="50" cy="50" r={r} fill="none" stroke="#D8D0BF" strokeWidth="6" />
         {/* Progress Value */}
         <circle
           cx="50"
@@ -48,9 +48,9 @@ export function Gauge({
       <div className="-mt-[4.2rem] mb-6 text-center">
         <div className="font-mono text-lg font-bold text-[#111111]">
           {typeof value === "number" ? value.toFixed(value >= 100 ? 0 : 1) : value}
-          <span className="text-[10px] text-[#737373]"> {unit}</span>
+          <span className="text-[10px] text-[#6B655A]"> {unit}</span>
         </div>
-        <div className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#525252]">
+        <div className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#4D483F]">
           {label}
         </div>
       </div>

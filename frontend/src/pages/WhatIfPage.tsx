@@ -19,7 +19,7 @@ interface Props {
 }
 
 const newsprintTipStyle = {
-  backgroundColor: "#FFFFFF",
+  backgroundColor: "#FAF7EE",
   border: "1px solid #111111",
   boxShadow: "3px 3px 0px #111111",
   borderRadius: 0,
@@ -76,13 +76,13 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
     <div className="fade-in space-y-10">
       {/* Editorial Title Banner */}
       <div className="border-b-2 border-[#111111] pb-4">
-        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
           SCENARIO SIMULATION ENGINE · BOREHOLE {wellId}
         </span>
         <h2 className="mt-1 font-serif text-4xl sm:text-5xl font-black text-[#111111] uppercase">
           What-If Parametric Ledger
         </h2>
-        <p className="mt-2 font-body text-sm text-[#525252] max-w-2xl leading-relaxed">
+        <p className="mt-2 font-body text-sm text-[#4D483F] max-w-2xl leading-relaxed">
           Manipulate surface steam generation variables and rod string pumping parameters.
           Evaluate simulated downstream thermodynamic responses prior to field dispatch.
         </p>
@@ -90,7 +90,7 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
 
       <div className="grid gap-8 lg:grid-cols-12 items-start">
         {/* Left Column: Sliders (4 cols) */}
-        <div className="lg:col-span-5 border-2 border-[#111111] bg-white p-6 hard-shadow">
+        <div className="lg:col-span-5 border-2 border-[#111111] bg-[#FAF7EE] p-6 hard-shadow">
           <div className="flex items-center justify-between border-b-2 border-[#111111] pb-3">
             <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#111111]">
               LEVER CONSOLE
@@ -204,14 +204,14 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
         {/* Right Column: Simulation Outcomes (7 cols) */}
         <div className="lg:col-span-7 space-y-6">
           {error && (
-            <div className="border border-[#CC0000] bg-[#FFF5F5] p-4 font-mono text-xs text-[#CC0000]">
+            <div className="border border-[#C41212] bg-[#F7EBEB] p-4 font-mono text-xs text-[#C41212]">
               SIMULATION ERROR: {error}
             </div>
           )}
 
           {!result && !loading && (
-            <div className="border border-[#111111] bg-[#F5F5F5] p-12 text-center">
-              <span className="font-mono text-xs uppercase tracking-widest text-[#737373]">
+            <div className="border border-[#111111] bg-[#EAE2D2] p-12 text-center">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#6B655A]">
                 READY FOR PARAMETRIC DISPATCH
               </span>
               <p className="mt-2 font-serif text-xl font-bold text-[#111111]">
@@ -223,10 +223,10 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
           {result && (
             <div className="space-y-6">
               {/* Outcome Ledger Cards */}
-              <div className="border border-[#111111] bg-white p-6">
+              <div className="border border-[#111111] bg-[#FAF7EE] p-6">
                 <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[#111111] pb-3">
                   <div>
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
                       PROJECTED RESULT
                     </span>
                     <h3 className="font-serif text-2xl font-bold text-[#111111]">
@@ -261,12 +261,12 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
 
                 {/* Warnings */}
                 {result.warnings && result.warnings.length > 0 && (
-                  <div className="mt-5 border-t border-[#CC0000] pt-3 space-y-1">
-                    <span className="font-mono text-[10px] font-bold uppercase text-[#CC0000]">
+                  <div className="mt-5 border-t border-[#C41212] pt-3 space-y-1">
+                    <span className="font-mono text-[10px] font-bold uppercase text-[#C41212]">
                       CONSTRAINT VIOLATIONS:
                     </span>
                     {result.warnings.map((w, idx) => (
-                      <div key={idx} className="font-mono text-xs text-[#CC0000]">
+                      <div key={idx} className="font-mono text-xs text-[#C41212]">
                         • {w}
                       </div>
                     ))}
@@ -276,9 +276,9 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
 
               {/* 10-Day Cycle Timeline */}
               {timeline && (
-                <div className="border border-[#111111] bg-white p-6">
+                <div className="border border-[#111111] bg-[#FAF7EE] p-6">
                   <div className="border-b border-[#111111] pb-3 mb-4">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#CC0000]">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#C41212]">
                       10-DAY POST-STEAM SOAK CHRONOLOGY
                     </span>
                     <h4 className="font-serif text-xl font-bold text-[#111111]">
@@ -289,15 +289,15 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
                   <div className="h-[260px] w-full">
                     <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                       <AreaChart data={timeline.points} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                        <CartesianGrid stroke="#E5E5E0" strokeDasharray="2 2" vertical={false} />
+                        <CartesianGrid stroke="#D8D0BF" strokeDasharray="2 2" vertical={false} />
                         <XAxis
                           dataKey="cycle_day"
-                          tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                          tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
                           axisLine={{ stroke: "#111111" }}
                           tickLine={{ stroke: "#111111" }}
                         />
                         <YAxis
-                          tick={{ fill: "#525252", fontSize: 10, fontFamily: "JetBrains Mono" }}
+                          tick={{ fill: "#4D483F", fontSize: 10, fontFamily: "JetBrains Mono" }}
                           axisLine={{ stroke: "#111111" }}
                           tickLine={{ stroke: "#111111" }}
                           width={36}
@@ -317,8 +317,8 @@ export function WhatIfPage({ wellId, dashboard }: Props) {
                           type="monotone"
                           dataKey="reservoir_temperature"
                           name="Temp (°C)"
-                          stroke="#CC0000"
-                          fill="#CC0000"
+                          stroke="#C41212"
+                          fill="#C41212"
                           fillOpacity={0.08}
                           strokeWidth={2}
                         />
@@ -358,7 +358,7 @@ function SliderField({
         <span className="font-semibold text-[#111111]">{label}</span>
         <span className="font-bold text-[#111111]">
           {value}
-          {unit && <span className="text-[#737373] font-normal"> {unit}</span>}
+          {unit && <span className="text-[#6B655A] font-normal"> {unit}</span>}
         </span>
       </div>
       <input
@@ -388,13 +388,13 @@ function ResultBox({
   return (
     <div
       className={`border border-[#111111] p-3 ${
-        highlight ? "bg-[#111111] text-[#F9F9F7]" : "bg-[#F9F9F7] text-[#111111]"
+        highlight ? "bg-[#111111] text-[#FAF7EE]" : "bg-[#EAE2D2] text-[#111111]"
       }`}
     >
-      <div className={`text-[9px] uppercase tracking-wider ${highlight ? "text-[#CC0000]" : "text-[#737373]"}`}>
+      <div className={`text-[9px] uppercase tracking-wider ${highlight ? "text-[#C41212]" : "text-[#6B655A]"}`}>
         {label}
       </div>
-      <div className={`mt-1 text-base font-bold ${isAlert ? "text-[#CC0000]" : ""}`}>
+      <div className={`mt-1 text-base font-bold ${isAlert ? "text-[#C41212]" : ""}`}>
         {value}
       </div>
     </div>
