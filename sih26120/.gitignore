@@ -1,0 +1,7 @@
+data/twin_memory.json
+backend/data/twin_memory.json
+node_modules/
+.env
+venv/
+__pycache__/
+*.pyc

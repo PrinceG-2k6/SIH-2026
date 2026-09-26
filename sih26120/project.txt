@@ -1,0 +1,514 @@
+ORIGIN — COMPLETE PROJECT BRIEF
+================================
+File purpose: Give any human or AI enough context to explain the project, answer questions, debug, demo, or extend it without reading the whole repo first.
+
+Repo: https://github.com/krishnavas23/SIH-2026
+Local path: e:\Z-my projects-Z\SIH-2026
+Hackathon: Smart India Hackathon 2026
+Problem ID: SIH26120
+Organization: Oil India Limited (OIL)
+Team: ORIGIN
+Product name: ORIGIN — Well-to-Surface AI Digital Twin
+
+
+0. ONE-SENTENCE PITCH
+---------------------
+ORIGIN is a hackathon prototype that predicts oil production and equipment failure risk for Baghewala cyclic-steam wells, then recommends feasible CSS (steam) + SRP (pumpjack) setpoints, and shows them on a dashboard plus a 3D/2D digital twin.
+
+It is a DECISION-SUPPORT DEMO, not a calibrated field control system.
+
+
+1. HARD DISCLAIMERS (ALWAYS SAY THESE)
+--------------------------------------
+- Data is SYNTHETIC (generated in code to look physically sensible).
+- Models are trained ONLY on that synthetic data.
+- Constraint limits in config.py are DEMO ASSUMPTIONS, not official OIL operating limits.
+- Predictions / recommendations must NOT be presented as guaranteed field outcomes.
+- The 3D twin is a schematic replica driven by model outputs, not a photogrammetry scan of a real well.
+
+
+2. DOMAIN (WHAT THE PROBLEM IS ABOUT)
+-------------------------------------
+Baghewala Field (Rajasthan) produces heavy oil. Operators use:
+
+CSS — Cyclic Steam Stimulation
+  Inject steam → soak → produce. Heat lowers oil viscosity so oil can flow.
+
+SRP — Sucker Rod Pump (pumpjack / nodding donkey)
+  Surface beam pump lifts oil through rods and tubing.
+
+The engineering trade-off:
+  More steam / faster pumping can raise offtake, but can worsen Steam-Oil Ratio (SOR), energy per barrel, rod load, rod floating, and failure risk.
+
+ORIGIN’s job:
+  1. Predict what happens if we use these CSS+SRP parameters.
+  2. Search feasible parameters and recommend a balanced (and Pareto) set.
+  3. Compare current vs recommended.
+  4. Let operators what-if simulate and watch a live twin.
+
+
+3. WELLS IN THE DEMO
+--------------------
+Three synthetic wells:
+  BGW-001  Baghewala Well 1  (default in UI)
+  BGW-002  Baghewala Well 2
+  BGW-003  Baghewala Well 3
+
+Field: Baghewala
+API gravity (synthetic): ~18°
+Status: active
+History: ~180 days of daily synthetic timeseries starting 2024-01-01
+CSS cycles simulated in generator.
+
+Defined in: backend/app/data/generator.py  (WELLS list)
+
+
+4. TECH STACK
+-------------
+Backend
+  Python, FastAPI, Uvicorn, Pydantic v2, SQLAlchemy 2
+  pandas, numpy, scikit-learn, XGBoost, joblib, SHAP
+  SQLite file: data/origin.db  (PostgreSQL-ready schema)
+
+Frontend
+  React 18, TypeScript, Vite, Tailwind CSS
+  Recharts (2D charts)
+  React Three Fiber + drei + Three.js (3D twin)
+
+Tests
+  pytest in /tests
+
+Launch helper
+  scripts/start.ps1  (Windows; starts backend + frontend)
+
+Git
+  Author on GitHub: krishnavas23
+  Branch: main
+
+
+5. HOW TO RUN (IMPORTANT PORTS)
+-------------------------------
+Windows PowerShell. Port 8000 often fails with WinError 10013. USE 8088.
+
+Backend:
+  cd "e:\Z-my projects-Z\SIH-2026\backend"
+  python -m venv .venv          # first time only
+  .\.venv\Scripts\activate
+  pip install -r requirements.txt   # first time only
+  python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8088 --app-dir .
+
+  API:  http://127.0.0.1:8088
+  Docs: http://127.0.0.1:8088/docs
+
+Frontend:
+  cd "e:\Z-my projects-Z\SIH-2026\frontend"
+  npm install                   # first time only
+  npm run dev
+  UI: http://localhost:5173
+
+Frontend proxy (frontend/vite.config.ts) currently targets:
+  /api  → http://127.0.0.1:8088
+  /ws   → ws://127.0.0.1:8088
+
+If you change backend port, change the Vite proxy to match.
+
+On startup the API:
+  1. ensure_demo_data() — generate CSV if missing, load SQLite
+  2. train_models() — train if model files missing, else load them
+
+Tests:
+  cd backend
+  pytest ../tests -q
+
+
+6. ARCHITECTURE (END TO END)
+----------------------------
+Demo CSV  →  SQLite (well_records)
+          →  preprocess + features
+          →  ML: production regression + failure classification
+          →  Constrained grid optimizer + Pareto selection
+          →  FastAPI /api/*
+          →  React dashboard (pages) + 3D twin + 2D schematic
+
+Mental model of three engines:
+  PREDICTION  = what happens if we use these parameters?
+  OPTIMIZATION = which feasible parameters should we choose?
+  COMPARISON   = current vs recommended deltas
+
+Secondary metrics (temp, viscosity, SOR, rod load, pump η, floating) are mostly PHYSICS-STYLE FORMULAS, not a second neural net. See predictor._derive_secondary_predictions.
+
+
+7. REPO MAP
+-----------
+backend/app/main.py                 FastAPI app + lifespan
+backend/app/config.py               Demo constraints + optimizer weights
+backend/app/api/routes.py           All REST + WebSocket routes
+backend/app/data/generator.py       Synthetic Baghewala physics + CSV
+backend/app/data/database.py        SQLAlchemy WellRecord + SQLite
+backend/app/data/loader.py          Queries, CSV import, latest state
+backend/app/ml/features.py          FEATURE_COLUMNS + engineered deltas
+backend/app/ml/trainer.py           Train, compare, save joblib
+backend/app/ml/predictor.py         Inference
+backend/app/ml/explainability.py    SHAP / feature importance
+backend/app/optimization/optimizer.py  Candidate search + scoring
+backend/app/optimization/pareto.py     Pareto front + 3 alternatives
+backend/app/optimization/cache.py      Repeat-load cache
+backend/app/simulation/scenario.py     What-if + CSS timeline
+backend/app/services/alerts.py         Threshold alerts
+backend/app/services/twin.py           Twin modes (current/predicted/optimized)
+backend/app/services/live_stream.py    Synthetic live ticks
+backend/app/schemas/*                  Pydantic models
+
+frontend/src/App.tsx                 Shell + page routing (no React Router; local state)
+frontend/src/services/api.ts         Fetch wrappers to /api
+frontend/src/types/index.ts          Shared TS types
+frontend/src/pages/OverviewPage.tsx
+frontend/src/pages/WhatIfPage.tsx
+frontend/src/pages/DigitalTwinPage.tsx
+frontend/src/pages/AlertsPage.tsx
+frontend/src/pages/ModelsPage.tsx
+frontend/src/pages/DataPage.tsx
+frontend/src/three/DigitalTwinScene.tsx   3D pumpjack + well
+frontend/src/components/WellSchematic.tsx 2D engineering SVG
+frontend/src/index.css               Design tokens (serif/mono industrial)
+
+models/production_model.joblib       SAVED trained production model (not source)
+models/failure_model.joblib          SAVED trained failure model
+models/metrics.json                  Who won + scores
+data/demo/baghewala_demo.csv         Synthetic dataset
+data/origin.db                       SQLite
+tests/                               API + Pareto tests
+model helper.txt                     ML-only notes
+project.txt                          THIS FILE
+
+
+8. OPERATING PARAMETERS (THE KNOBS)
+-----------------------------------
+Pydantic: OperatingParameters  (backend/app/schemas/prediction.py)
+
+Name                   Unit     Demo min   Demo max     Meaning
+steam_volume           tons     200        800          CSS steam mass last/this cycle
+injection_pressure     bar      5          12           Steam injection pressure
+injection_duration     hours    24         120          How long steam is injected
+soak_time              hours    24         120          Soak after injection
+stroke_length          m        1.5        3.5          Pumpjack stroke
+spm                    1/min    3          10           Strokes per minute
+vfd_setting            %        40         100          Variable frequency drive
+
+Hard optimizer caps (config.py):
+  max_rod_load_kn = 95
+  max_failure_probability = 0.55
+
+Optimizer score weights (config.py):
+  weight_production      = 1.0
+  weight_sor_penalty     = 0.4
+  weight_energy_penalty  = 0.3
+  weight_failure_penalty = 0.5
+  weight_cost_penalty    = 0.2  (configured; primary score uses production/SOR/energy/failure/rod)
+
+
+9. KEY WELL STATE FIELDS
+------------------------
+From WellState / well_records (not all are ML targets):
+
+Reservoir / fluid
+  reservoir_temperature °C
+  reservoir_pressure
+  oil_viscosity cP
+  oil_api
+  water_cut
+
+CSS
+  css_cycle_id
+  steam_volume, steam_rate
+  injection_pressure, injection_duration, soak_time
+
+Production / SRP
+  oil_rate_bopd          barrels of oil per day  ← PRODUCTION MODEL TARGET
+  stroke_length, spm, vfd_setting
+  pump_efficiency
+  rod_load kN
+  energy_consumption, energy_per_barrel
+  sor                    steam-oil ratio
+  rod_floating_probability
+  failure_probability    ← used to BUILD FAILURE LABELS
+
+Events in DB (synthetic flags):
+  pump_unsetting_event, rod_floating_event, rod_failure_event
+
+
+10. ML MODELS (PYTHON — NOT THE 3D SCENE)
+-----------------------------------------
+This is classical supervised ML. Not deep learning. Not an LLM.
+
+A) Production forecast — REGRESSION
+   Target: oil_rate_bopd
+   Candidates: LinearRegression, RandomForestRegressor, XGBRegressor
+   Selected typically: RandomForest (highest R²)
+   RF params: n_estimators=100, max_depth=8, random_state=42
+   XGB params: n_estimators=120, max_depth=6, learning_rate=0.08, objective=reg:squarederror
+   Metrics (see models/metrics.json; can change after retrain):
+     MAE ~ 0.84, RMSE ~ 1.08, R² ~ 0.93, holdout n=108
+
+B) Failure risk — CLASSIFICATION
+   Label = 1 if failure_probability > 0.45 OR rod_failure_event==1 OR pump_unsetting_event==1
+   Candidates: LogisticRegression, RandomForestClassifier, XGBClassifier
+   Selected typically: LogisticRegression (highest F1)
+   LR params: max_iter=500, random_state=42
+   Metrics typically: F1 ~ 0.97, ROC-AUC ~ 0.99
+   (High scores because labels are generated from the same synthetic physics — expected for a demo.)
+
+Validation: chronological 80/20 split (time-ordered, not shuffled).
+
+Feature columns (FEATURE_COLUMNS + engineered):
+  reservoir_temperature, reservoir_pressure, oil_viscosity, oil_api, water_cut
+  steam_volume, injection_pressure, injection_duration, soak_time
+  stroke_length, spm, vfd_setting
+  pump_efficiency, rod_load, sor, energy_per_barrel
+  production_change, temperature_change, viscosity_change
+  rolling_production (7-day), rolling_sor (7-day)
+
+Inference path (predictor.py):
+  latest SQLite state → overlay proposed parameters → preprocess → feature matrix
+  → production.predict → oil rate
+  → failure.predict_proba[:,1] → failure probability
+  → derive temp/viscosity/SOR/energy/pump/rod/floating with formulas
+
+Saved artifacts (binary dumps, not editable source):
+  models/production_model.joblib
+  models/failure_model.joblib
+  models/metrics.json
+
+Retrain:
+  Automatic if files missing.
+  Force: train_models(force=True) or POST /api/data/import (CSV upload retrains + invalidates optimizer cache).
+
+
+11. OPTIMIZER
+-------------
+Not an ML model. It CALLS the prediction models.
+
+Steps:
+  1. Build compact grid of CSS+SRP combinations (~72 after cap).
+     steam: 400,500,580,650
+     pressure: 7.5, 8.5
+     duration: 72
+     soak: 48, 60
+     stroke: 2.2, 2.5, 2.8
+     spm: 5, 6, 7
+     vfd: 65, 80
+  2. Drop anything outside config bounds.
+  3. predict() each candidate.
+  4. Score = wp*oil − ws*SOR*10 − we*energy_per_bbl − wf*fail*100 − rod over-limit penalty − fail over-cap penalty.
+  5. Best score → recommended (label "balanced").
+  6. Pareto front on (max oil, min SOR, min failure) → up to 3 labeled options:
+     option_a_production / option_b_efficiency / option_c_reliability
+     (or production_focus / efficiency_focus / reliability_focus as fallback)
+
+Cached per well/weights so dashboard reloads are faster.
+
+
+12. WHAT-IF SIMULATION
+----------------------
+POST /api/simulate
+  Runs predict at custom parameters vs current predict.
+  Returns deltas, estimated cost (steam*2.5 + energy heuristic), warnings.
+
+POST /api/simulate/timeline
+  CSS cycle day-by-day synthetic trajectory (oil, temp, failure).
+  Frontend What-If page plots this.
+
+Warnings examples:
+  High SOR, elevated failure, rod floating, low pump η, excessive steam without gain.
+
+
+13. ALERTS (DEMO THRESHOLDS)
+----------------------------
+backend/app/services/alerts.py
+
+Severity: CRITICAL / WARNING / INFO
+
+ROD_FLOATING     WARNING   floating ≥ 0.35
+FAILURE_RISK     CRITICAL  failure ≥ 0.30
+ROD_LOAD         WARNING   rod load ≥ 80 kN
+ROD_LOAD_LIMIT   CRITICAL  rod load > 95 kN
+PUMP_EFFICIENCY  WARNING   η ≤ 0.55
+HIGH_SOR         WARNING   SOR ≥ 4.5
+HIGH_ENERGY      INFO      energy/bbl ≥ 8
+PRODUCTION_DECLINE INFO    predicted Δ production ≤ −15% vs current (when comparing params)
+
+These are DEMO thresholds, not OIL alarm setpoints.
+
+
+14. DIGITAL TWIN (3D + 2D)
+--------------------------
+UI page: Digital Twin (page id "twin")
+Data: GET /api/twin/{well_id}?mode=current|predicted|optimized
+Builder: backend/app/services/twin.py
+
+Modes:
+  current    — latest well state + predict at current params
+  predicted  — model forecast at current params
+  optimized  — optimizer recommended params + predict
+  scenario   — POST body with custom parameters
+
+3D SOURCE CODE (not Python ML):
+  frontend/src/three/DigitalTwinScene.tsx
+  React Three Fiber Canvas: pumpjack kinematics, wellhead tree, casing, formation heat plume,
+  oil droplets, steam cloud, tank battery, ACES lighting, orbit controls.
+
+Functional links (so judges see it is not a static GIF):
+  SPM        → crank / beam speed
+  stroke     → beam / polish-rod travel amplitude
+  viscosity  → oil particle mobility
+  steam+temp → formation heat sphere size/color
+  rod load / floating → polish-rod color + chatter
+
+2D schematic:
+  frontend/src/components/WellSchematic.tsx
+  Engineering-drawing SVG with depth scale, pay interval (Jodhpur SS label), callouts.
+
+Python ML files are backend/app/ml/*.py — do not confuse with the 3D file.
+
+
+15. FRONTEND PAGES
+------------------
+No React Router. App.tsx holds page: overview | whatif | twin | alerts | models | data
+
+Header (AppShell): brand ORIGIN, well selector, Analyze button (reloads dashboard).
+
+Overview
+  Live stream bar (poll GET /api/live/{well} every 3s)
+  Hero oil rate, story text, gauges, vitals strip, history charts
+  Forecast vs AI recommendation
+  Pareto cards, benefit summary, detailed setpoints table, SHAP panel
+
+What-If
+  Sliders for all 7 operating parameters
+  Simulate + AI setpoints + Reset
+  Gauges + timeline chart
+
+Twin
+  Mode tabs + gauges + 2D schematic + 3D scene
+
+Alerts
+  Severity board from dashboard.alerts
+
+Models
+  Selected model names + MAE/R² or F1/AUC + feature-weight bar charts
+
+Data
+  CSV import → POST /api/data/import → retrain + cache invalidate
+
+Design system:
+  Fonts: Source Serif 4, Source Sans 3, JetBrains Mono
+  Palette: dark #08090b, ink #ebe6db, accent gold #d4a05a
+  Classes: plate, eyebrow, serif, mono, btn-primary, gauges
+
+
+16. API CHEAT SHEET
+-------------------
+All under prefix /api unless noted.
+
+GET  /                         product name + disclaimer
+GET  /api/health
+GET  /api/wells                list of 3 wells
+GET  /api/wells/{id}           latest WellState
+GET  /api/wells/{id}/history?limit=90
+POST /api/predict              { well_id, parameters? }
+POST /api/optimize             { well_id, weights? }
+POST /api/simulate             { well_id, parameters, label }
+POST /api/simulate/compare     three-way current / AI / custom
+POST /api/simulate/timeline    { well_id, parameters, cycle_days }
+GET  /api/alerts/{id}
+GET  /api/twin/{id}?mode=
+POST /api/twin/{id}            { mode, parameters }
+GET  /api/model-explainability
+GET  /api/model-explainability/{id}   local SHAP-style contributions
+GET  /api/benefit-summary/{id}
+GET  /api/live/{id}?tick=n
+WS   /api/ws/live/{id}         JSON ticks every 3s
+GET  /api/dashboard/{id}       BIG payload used by Overview (slow: predict+optimize)
+GET  /api/model-metrics
+POST /api/data/import          multipart file CSV
+
+Dashboard payload includes:
+  current_state, history, prediction, optimization, comparison, model_metrics, alerts, demo_disclaimer
+
+
+17. SYNTHETIC PHYSICS (GENERATOR)
+---------------------------------
+backend/app/data/generator.py
+
+Intuition baked into demo data:
+  Higher temperature → lower viscosity (exponential-ish)
+  Production rises with mobility (temp/viscosity), steam factor, SRP factor (spm*stroke*η)
+  SOR ≈ steam / oil * 0.08
+  Pump efficiency falls with high viscosity, high SPM, long stroke
+  Rod load rises with viscosity, SPM, stroke
+  Failure rises with floating, high rod load, low pump η
+
+This is WHY ML can fit well: labels and features come from the same generator.
+
+
+18. CSV IMPORT SCHEMA (EXPECTED COLUMNS)
+----------------------------------------
+well_id, timestamp, reservoir_temperature, oil_viscosity, steam_volume,
+injection_pressure, oil_rate_bopd, stroke_length, spm, sor, failure_probability
+(plus other WellRecord columns if present)
+
+Import REPLACES SQLite well_records, retrains models, clears optimizer cache.
+
+
+19. JUDGE / DEMO FLOW
+---------------------
+1. Start backend 8088 + frontend 5173.
+2. Open http://localhost:5173 — wait for Analyze (dashboard can take several seconds).
+3. Select BGW-001.
+4. Overview: show live offtake, AI vs current %, Pareto options, benefit.
+5. What-If: slam SPM high, Simulate, show warnings + timeline.
+6. Twin: Current vs Optimized — pumpjack speed/stroke and heat plume change.
+7. Alerts / Models / Data as backup slides.
+8. Repeat disclaimer: synthetic demo.
+
+
+20. WHAT TO SAY IF ASKED “WHAT MODEL?”
+--------------------------------------
+Two models:
+  RandomForest (typically) predicts oil rate.
+  LogisticRegression (typically) predicts failure probability.
+Both trained with scikit-learn/XGBoost comparison on synthetic Baghewala CSV.
+Optimizer is a constrained search over those predictions, not a third trained model.
+3D “model” is Three.js geometry in DigitalTwinScene.tsx.
+
+
+21. COMMON FAILURES
+-------------------
+WinError 10013 on bind: port occupied. Use 8088; kill leftover uvicorn.
+Blank Overview / Analyzing forever: backend down, wrong Vite proxy port, or optimizer still running (~seconds).
+ECONNREFUSED on /api: backend not started.
+Models “too good”: synthetic labels — expected; do not claim field accuracy.
+Do not open .joblib as source code — they are serialized sklearn objects.
+
+
+22. INTENTIONAL LIMITS / FUTURE
+-------------------------------
+Compact 72-candidate grid (not NSGA-II / pymoo yet).
+SQLite not PostgreSQL in demo.
+No auth.
+No real OIL historian / SCADA.
+No photoreal well scan.
+
+Documented next: NSGA-II, PostgreSQL, auth, real data calibration.
+
+
+23. HOW ANOTHER AI SHOULD ANSWER QUESTIONS
+------------------------------------------
+- Prefer this file + model helper.txt + README.md.
+- For code locations, cite the paths in section 7.
+- Never claim OIL-calibrated results.
+- Distinguish: Python ML (backend/app/ml) vs 3D scene (frontend/src/three).
+- If asked to change UI/models, edit source files listed above, then retrain if features/labels change (delete models/*.joblib or train_models(force=True)).
+- Default well BGW-001, default backend port for this checkout: 8088.
+
+End of project brief.
